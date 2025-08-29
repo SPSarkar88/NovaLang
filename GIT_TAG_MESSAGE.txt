@@ -1,0 +1,34 @@
+NovaLang v1.0.0-alpha - First Production Release 🚀
+
+Complete functional programming language with JavaScript-like syntax.
+
+✨ MAJOR FEATURES:
+• Full language implementation (lexer, parser, evaluator, runtime)
+• M3 Advanced Features: Template literals, spread syntax, destructuring  
+• Standalone executable - no .NET runtime required for end users
+• Interactive REPL and comprehensive I/O system
+• 5 essential examples with complete tutorials (16.6KB)
+
+🎯 WHAT'S INCLUDED:
+• Template literals: `Hello ${name}!` with full expression support
+• Spread syntax: [...array] and {...object} operations  
+• Destructuring: let [a, b, ...rest] = array patterns
+• I/O functions: console.log(), print(), input() 
+• Functions & closures with lexical scoping
+• Control flow: if/else, loops, try/catch, switch/case
+
+📦 READY TO USE:
+• Standalone distribution: novalang script.sf
+• Interactive shell: novalang repl  
+• Built-in testing: novalang test
+• Complete documentation and examples
+
+🔧 TECHNICAL:
+• Platform: .NET 9.0, C# 12
+• Architecture: Recursive descent parser + tree-walking interpreter
+• Cross-platform: Windows, Linux, macOS
+• Production tested: All features validated
+
+Get started: novalang examples/complete_guide.sf
+
+Full release notes: RELEASE_NOTES.md

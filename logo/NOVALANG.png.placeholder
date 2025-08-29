@@ -1,0 +1,17 @@
+# NovaLang Logo Placeholder
+
+This file serves as a placeholder for NOVALANG.png
+
+To complete the logo setup:
+1. Create or design a NovaLang logo image
+2. Save it as "NOVALANG.png" in this logo/ folder
+3. Recommended specifications:
+   - Format: PNG with transparency
+   - Size: 200-400px width for README display
+   - Style: Modern, clean design representing functional programming
+   - Colors: Professional color scheme matching the project theme
+
+The README.md already includes the logo reference:
+![NovaLang Logo](logo/NOVALANG.png)
+
+Once you place the actual NOVALANG.png file here, the logo will display automatically.

@@ -416,3 +416,8 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Exception: Keep logo files
+!logo/*.png
+!logo/*.jpg
+!logo/*.svg

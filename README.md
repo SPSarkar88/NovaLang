@@ -1,5 +1,13 @@
 ﻿# NovaLang - JavaScript-like Functional Programming Language
 
+<div align="center">
+  <img src="logo/NOVA LANG.png" alt="NovaLang Logo" width="200"/>
+  <br/>
+  <em>Making functional programming accessible with familiar syntax!</em>
+</div>
+
+<br/>
+
 A modern, functional programming language built in **C#/.NET 9.0** with JavaScript-like syntax and advanced language features.
 
 ## 📋 Table of Contents
