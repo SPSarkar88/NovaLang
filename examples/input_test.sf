@@ -1,0 +1,26 @@
+// Test the new input function
+print("🚀 Testing NovaLang Input Function");
+print();
+
+// Basic input without prompt
+print("Enter anything and press Enter:");
+let userInput1 = input();
+print("You entered:", userInput1);
+print();
+
+// Input with prompt
+let name = input("What's your name? ");
+print("Hello,", name + "!");
+
+let age = input("What's your age? ");
+print(`Nice to meet you, ${name}! You are ${age} years old.`);
+
+// Interactive program
+print();
+print("Let's do some math!");
+let num1 = input("Enter first number: ");
+let num2 = input("Enter second number: ");
+
+// Note: input returns strings, so we'd need number conversion for real math
+print(`You entered: ${num1} and ${num2}`);
+print("Input function test complete!");

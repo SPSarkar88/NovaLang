@@ -1,0 +1,21 @@
+// Simple test to debug the issues
+print("Testing basic features:");
+
+// Test template literals
+let name = "Alice";
+let age = 25;
+print(`Name: ${name}, Age: ${age}`);
+
+// Test comparison
+let i = 0;
+let arr = ["a", "b", "c"];
+print("Array:", arr);
+print("Length:", arr.length);
+print("i < arr.length:", i < arr.length);
+
+// Test loop
+for (let j = 0; j < 3; j = j + 1) {
+    print("j =", j);
+}
+
+print("Test complete.");

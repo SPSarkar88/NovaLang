@@ -1,0 +1,27 @@
+// Function declarations and calls
+function greet(name) {
+    return "Hello, " + name + "!";
+}
+
+function add(x, y) {
+    return x + y;
+}
+
+function factorial(n) {
+    if (n <= 1) {
+        return 1;
+    } else {
+        return n * factorial(n - 1);
+    }
+}
+
+// Arrow functions
+let multiply = (a, b) => a * b;
+let square = x => x * x;
+
+// Test function calls
+console.log(greet("Alice"));        // Expected: Hello, Alice!
+console.log(add(5, 3));            // Expected: 8
+console.log(factorial(5));         // Expected: 120
+console.log(multiply(4, 6));       // Expected: 24
+console.log(square(7));            // Expected: 49

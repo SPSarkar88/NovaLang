@@ -1,0 +1,12 @@
+// Test the new print function
+print("Hello from print!");
+print("Testing multiple arguments:", 42, true, [1, 2, 3]);
+
+// Compare with console.log
+console.log("Hello from console.log!");
+console.log("Both should work identically");
+
+// Template literals with print
+let name = "NovaLang";
+let version = "1.0.0";
+print(`Welcome to ${name} version ${version}!`);

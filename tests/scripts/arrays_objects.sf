@@ -1,0 +1,25 @@
+// Array and Object operations
+let numbers = [1, 2, 3, 4, 5];
+let fruits = ["apple", "banana", "cherry"];
+let mixed = [1, "hello", true, null];
+
+// Object literals
+let person = {
+    name: "John",
+    age: 30,
+    city: "New York"
+};
+
+let coordinates = {
+    x: 10,
+    y: 20
+};
+
+// Access operations
+console.log("First number:", numbers[0]);       // Expected: 1
+console.log("Last fruit:", fruits[2]);          // Expected: cherry
+console.log("Mixed array:", mixed);             // Expected: [1, "hello", true, null]
+
+console.log("Person name:", person.name);       // Expected: John
+console.log("Person age:", person["age"]);      // Expected: 30
+console.log("Coordinates:", coordinates);       // Expected: { x: 10, y: 20 }

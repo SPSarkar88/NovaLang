@@ -1,0 +1,35 @@
+// Control flow: if/else, loops
+let x = 15;
+
+// If-else statement
+if (x > 10) {
+    console.log("x is greater than 10");
+} else if (x > 5) {
+    console.log("x is greater than 5 but not greater than 10");
+} else {
+    console.log("x is 5 or less");
+}
+
+// While loop
+let i = 0;
+let sum = 0;
+while (i < 5) {
+    sum = sum + i;
+    i = i + 1;
+}
+console.log("Sum from while loop:", sum);       // Expected: 10
+
+// For loop
+let product = 1;
+for (let j = 1; j <= 5; j = j + 1) {
+    product = product * j;
+}
+console.log("Product from for loop:", product); // Expected: 120
+
+// Nested loops
+console.log("Multiplication table:");
+for (let a = 1; a <= 3; a = a + 1) {
+    for (let b = 1; b <= 3; b = b + 1) {
+        console.log(a + " * " + b + " = " + (a * b));
+    }
+}

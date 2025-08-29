@@ -1,0 +1,14 @@
+// Basic arithmetic and variables
+let a = 10;
+let b = 20;
+let sum = a + b;
+let difference = b - a;
+let product = a * b;
+let quotient = b / a;
+let remainder = b % a;
+
+console.log("Sum:", sum);           // Expected: 30
+console.log("Difference:", difference); // Expected: 10
+console.log("Product:", product);       // Expected: 200
+console.log("Quotient:", quotient);     // Expected: 2
+console.log("Remainder:", remainder);   // Expected: 0

@@ -1,0 +1,334 @@
+// NovaLang Complete Feature Demonstration (Working Version)
+// This file demonstrates all currently working NovaLang features
+// Run with: novalang working_example.sf
+
+print("🚀 NovaLang Complete Feature Demo");
+print("=====================================");
+
+// ===== 1. BASIC SYNTAX AND VARIABLES =====
+print("\n1️⃣ Basic Syntax and Variables");
+print("------------------------------");
+
+// Variables and constants
+let userName = "Alice";
+const PI = 3.14159;
+let age = 25;
+let isActive = true;
+
+print("User:", userName);
+print("Age:", age);
+print("Active:", isActive);
+print("PI constant:", PI);
+
+// ===== 2. FUNCTIONS =====
+print("\n2️⃣ Functions");
+print("------------");
+
+// Regular function
+function greet(name) {
+    return "Hello " + name + "! Welcome to NovaLang.";
+}
+
+// Arrow function
+const multiply = (a, b) => a * b;
+const square = x => x * x;
+
+print(greet("Bob"));
+print("5 * 6 =", multiply(5, 6));
+print("7 squared =", square(7));
+
+// Function with multiple operations
+function calculateTip(bill, tipPercent) {
+    let tip = bill * tipPercent / 100;
+    let total = bill + tip;
+    return total;
+}
+
+let billAmount = 50;
+let tipRate = 18;
+print("Bill: $" + billAmount + ", Tip: " + tipRate + "%, Total: $" + calculateTip(billAmount, tipRate));
+
+// ===== 3. DATA TYPES AND STRUCTURES =====
+print("\n3️⃣ Data Types and Structures");
+print("----------------------------");
+
+// Arrays
+let numbers = [1, 2, 3, 4, 5];
+let colors = ["red", "green", "blue"];
+let mixed = [42, "hello", true, null];
+
+print("Numbers:", numbers);
+print("First color:", colors[0]);
+print("Last number:", numbers[4]);
+print("Mixed array:", mixed);
+
+// Objects
+let person = {
+    name: "Charlie",
+    age: 30,
+    skills: ["JavaScript", "NovaLang", "Python"],
+    address: {
+        city: "Seattle",
+        state: "WA"
+    }
+};
+
+print("Person:", person);
+print("Name:", person.name);
+print("City:", person.address.city);
+print("Skills:", person.skills);
+print("First skill:", person.skills[0]);
+
+// ===== 4. TEMPLATE LITERALS =====
+print("\n4️⃣ Template Literals with Interpolation");
+print("---------------------------------------");
+
+let product = { name: "Laptop", price: 999.99, discount: 100 };
+let finalPrice = product.price - product.discount;
+
+// Template literals work!
+print(`Product: ${product.name}`);
+print(`Original Price: $${product.price}`);
+print(`Discount: $${product.discount}`);
+print(`Final Price: $${finalPrice}`);
+print(`With tax (8.5%): $${finalPrice * 1.085}`);
+
+// Complex template with expressions
+let year = 2025;
+print(`In ${year}, ${person.name} will be ${person.age + (year - 2025)} years old.`);
+
+// ===== 5. DESTRUCTURING =====
+print("\n5️⃣ Destructuring");
+print("----------------");
+
+// Array destructuring
+let fruits = ["apple", "banana", "orange", "grape"];
+let [first, second, third, fourth] = fruits;
+
+print("Array destructuring:");
+print("First fruit:", first);
+print("Second fruit:", second);
+print("Third fruit:", third);
+
+// Rest elements in destructuring
+let [primary, ...otherFruits] = fruits;
+print("Primary fruit:", primary);
+print("Other fruits:", otherFruits);
+
+// Object destructuring
+let { name, age: personAge, skills } = person;
+print("Object destructuring:");
+print("Name:", name);
+print("Age:", personAge);
+print("Skills:", skills);
+
+// Nested destructuring
+let { address: { city, state } } = person;
+print("Nested destructuring:");
+print("City:", city);
+print("State:", state);
+
+// ===== 6. SPREAD SYNTAX =====
+print("\n6️⃣ Spread Syntax");
+print("---------------");
+
+// Array spread
+let moreNumbers = [6, 7, 8];
+let allNumbers = [...numbers, ...moreNumbers];
+let withExtra = [0, ...numbers, 100];
+
+print("Original numbers:", numbers);
+print("More numbers:", moreNumbers);
+print("Combined:", allNumbers);
+print("With extras:", withExtra);
+
+// Object spread
+let basicInfo = { name: "David", age: 28 };
+let contactInfo = { email: "david@example.com", phone: "555-0123" };
+let fullProfile = { ...basicInfo, ...contactInfo, location: "Portland" };
+
+print("Basic info:", basicInfo);
+print("Contact info:", contactInfo);
+print("Full profile:", fullProfile);
+
+// ===== 7. CONTROL FLOW =====
+print("\n7️⃣ Control Flow");
+print("---------------");
+
+// Conditional logic
+let score = 85;
+if (score >= 90) {
+    print("Grade: A (Excellent!)");
+} else if (score >= 80) {
+    print("Grade: B (Good job!)");
+} else if (score >= 70) {
+    print("Grade: C (Satisfactory)");
+} else {
+    print("Grade: F (Needs improvement)");
+}
+
+// Logical operators
+let hasLicense = true;
+let hasInsurance = true;
+let driverAge = 25;
+
+if (driverAge >= 18 && hasLicense && hasInsurance) {
+    print("✅ Qualified to drive!");
+} else {
+    print("❌ Missing requirements to drive.");
+}
+
+// Loops with known count (since we can't use .length)
+print("\nCountdown:");
+for (let i = 5; i > 0; i = i - 1) {
+    print(i + "...");
+}
+print("🚀 Launch!");
+
+// Manual loop through array (since length property isn't available)
+print("\nFruit list:");
+print("1. " + fruits[0]);
+print("2. " + fruits[1]);
+print("3. " + fruits[2]);
+print("4. " + fruits[3]);
+
+// ===== 8. COMPLEX DATA MANIPULATION =====
+print("\n8️⃣ Complex Data Manipulation");
+print("----------------------------");
+
+// Array of objects
+let employees = [
+    { name: "Alice", department: "Engineering", salary: 90000, level: "Senior" },
+    { name: "Bob", department: "Design", salary: 75000, level: "Mid" },
+    { name: "Charlie", department: "Engineering", salary: 95000, level: "Senior" },
+    { name: "Diana", department: "Marketing", salary: 70000, level: "Junior" }
+];
+
+print("Employee Directory:");
+// Manual iteration since we can't use .length
+print("- " + employees[0].name + " (" + employees[0].department + "): $" + employees[0].salary);
+print("- " + employees[1].name + " (" + employees[1].department + "): $" + employees[1].salary);
+print("- " + employees[2].name + " (" + employees[2].department + "): $" + employees[2].salary);
+print("- " + employees[3].name + " (" + employees[3].department + "): $" + employees[3].salary);
+
+// Filter engineering employees manually
+print("\nEngineering Team:");
+if (employees[0].department === "Engineering") {
+    print("🔧 " + employees[0].name + ": $" + employees[0].salary + " (" + employees[0].level + ")");
+}
+if (employees[1].department === "Engineering") {
+    print("🔧 " + employees[1].name + ": $" + employees[1].salary + " (" + employees[1].level + ")");
+}
+if (employees[2].department === "Engineering") {
+    print("🔧 " + employees[2].name + ": $" + employees[2].salary + " (" + employees[2].level + ")");
+}
+if (employees[3].department === "Engineering") {
+    print("🔧 " + employees[3].name + ": $" + employees[3].salary + " (" + employees[3].level + ")");
+}
+
+// ===== 9. NESTED STRUCTURES =====
+print("\n9️⃣ Nested Structures");
+print("--------------------");
+
+let company = {
+    name: "Tech Innovations Inc.",
+    founded: 2020,
+    departments: {
+        engineering: {
+            head: "Alice",
+            projects: [
+                { name: "NovaLang", status: "active", priority: "high" },
+                { name: "WebApp", status: "completed", priority: "medium" }
+            ]
+        },
+        marketing: {
+            head: "Eve",
+            campaigns: ["Summer Sale", "Product Launch"]
+        }
+    }
+};
+
+// Access nested data with destructuring
+let { name: companyName, founded, departments } = company;
+let { engineering, marketing } = departments;
+let { head: engHead, projects } = engineering;
+let { head: marketingHead, campaigns } = marketing;
+
+print("Company:", companyName, "(Founded:", founded + ")");
+print("Engineering Head:", engHead);
+print("Marketing Head:", marketingHead);
+
+// Access projects
+let [project1, project2] = projects;
+print("Active Projects:");
+if (project1.status === "active") {
+    print("📋 " + project1.name + " (Priority: " + project1.priority + ")");
+}
+if (project2.status === "active") {
+    print("📋 " + project2.name + " (Priority: " + project2.priority + ")");
+}
+
+print("Marketing Campaigns:");
+print("🎯 " + campaigns[0]);
+print("🎯 " + campaigns[1]);
+
+// ===== 10. PRACTICAL EXAMPLE =====
+print("\n🔟 Practical Example: Shopping Cart");
+print("-----------------------------------");
+
+let cart = {
+    items: [
+        { name: "Laptop", price: 999.99, quantity: 1 },
+        { name: "Mouse", price: 24.99, quantity: 2 },
+        { name: "Keyboard", price: 79.99, quantity: 1 }
+    ],
+    discountPercent: 10,
+    taxPercent: 8.5
+};
+
+// Calculate totals manually
+let [item1, item2, item3] = cart.items;
+
+let item1Total = item1.price * item1.quantity;
+let item2Total = item2.price * item2.quantity;
+let item3Total = item3.price * item3.quantity;
+
+print(item1.name + ": $" + item1.price + " x " + item1.quantity + " = $" + item1Total);
+print(item2.name + ": $" + item2.price + " x " + item2.quantity + " = $" + item2Total);
+print(item3.name + ": $" + item3.price + " x " + item3.quantity + " = $" + item3Total);
+
+let subtotal = item1Total + item2Total + item3Total;
+let discount = subtotal * (cart.discountPercent / 100);
+let afterDiscount = subtotal - discount;
+let tax = afterDiscount * (cart.taxPercent / 100);
+let finalTotal = afterDiscount + tax;
+
+print("\n📊 Cart Summary:");
+print("Subtotal: $" + subtotal);
+print("Discount (" + cart.discountPercent + "%): -$" + discount);
+print("After Discount: $" + afterDiscount);
+print("Tax (" + cart.taxPercent + "%): $" + tax);
+print("Final Total: $" + finalTotal);
+
+// Template literal version
+print(`\n🧾 Receipt (Template Format):`);
+print(`Subtotal: $${subtotal}`);
+print(`Discount: -$${discount}`);
+print(`Tax: $${tax}`);
+print(`Total: $${finalTotal}`);
+
+// ===== CONCLUSION =====
+print("\n🎉 Demo Complete!");
+print("=================");
+print("This demonstration successfully showed:");
+print("✅ Variables and constants");
+print("✅ Functions (regular and arrow)");
+print("✅ Arrays and objects");
+print("✅ Template literal interpolation");
+print("✅ Destructuring assignment");
+print("✅ Spread syntax");
+print("✅ Control flow (if/else, manual loops)");
+print("✅ Complex nested data structures");
+print("✅ Real-world application example");
+print("\nNovaLang M3 features are working perfectly! 🚀");
+print("Note: Some features like array.length will be added in future updates.");

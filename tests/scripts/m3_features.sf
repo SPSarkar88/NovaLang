@@ -1,0 +1,47 @@
+// M3 Features: Spread syntax, destructuring, template literals
+
+// Array spread syntax
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combined = [...arr1, ...arr2, 7, 8];
+console.log("Combined array:", combined);       // Expected: [1, 2, 3, 4, 5, 6, 7, 8]
+
+// Object spread syntax
+let person = {name: "Alice", age: 25};
+let location = {city: "Boston", country: "USA"};
+let fullProfile = {...person, ...location, occupation: "Engineer"};
+console.log("Full profile:", fullProfile);     // Expected: {name: "Alice", age: 25, city: "Boston", country: "USA", occupation: "Engineer"}
+
+// Array destructuring
+let [first, second, ...rest] = [10, 20, 30, 40, 50];
+console.log("First:", first);                  // Expected: 10
+console.log("Second:", second);                // Expected: 20
+console.log("Rest:", rest);                    // Expected: [30, 40, 50]
+
+// Object destructuring
+let {name, age} = {name: "Bob", age: 30, city: "Seattle"};
+console.log("Destructured name:", name);       // Expected: Bob
+console.log("Destructured age:", age);         // Expected: 30
+
+// Object destructuring with renaming
+let {name: fullName, age: years} = {name: "Charlie", age: 35};
+console.log("Full name:", fullName);           // Expected: Charlie
+console.log("Years:", years);                  // Expected: 35
+
+// Nested destructuring
+let data = {
+    user: {name: "David", details: {age: 28, city: "Portland"}},
+    scores: [95, 87, 92]
+};
+// Note: Complex nested destructuring might need more implementation
+
+// Template literals (basic)
+let message = `Hello World!`;
+console.log("Template message:", message);     // Expected: Hello World!
+
+// Combining features
+let baseNumbers = [1, 2, 3];
+let [base1, ...remaining] = baseNumbers;
+let expanded = [0, ...remaining, 4, 5];
+console.log("Base1:", base1);                  // Expected: 1
+console.log("Expanded:", expanded);            // Expected: [2, 3, 4, 5]

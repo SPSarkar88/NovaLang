@@ -1,0 +1,270 @@
+// NovaLang Complete Feature Demonstration
+// This file demonstrates all major NovaLang features
+// Run with: novalang complete_example.sf
+
+print("🚀 NovaLang Complete Feature Demo");
+print("=====================================");
+
+// ===== 1. BASIC SYNTAX AND VARIABLES =====
+print("\n1️⃣ Basic Syntax and Variables");
+print("------------------------------");
+
+// Variables and constants
+let userName = "Alice";
+const PI = 3.14159;
+let age = 25;
+let isActive = true;
+
+print(`User: ${userName}, Age: ${age}, Active: ${isActive}`);
+print(`PI constant: ${PI}`);
+
+// ===== 2. FUNCTIONS =====
+print("\n2️⃣ Functions");
+print("------------");
+
+// Regular function
+function greet(name) {
+    return `Hello, ${name}! Welcome to NovaLang.`;
+}
+
+// Arrow function
+const multiply = (a, b) => a * b;
+const square = x => x * x;
+
+print(greet("Bob"));
+print(`5 * 6 = ${multiply(5, 6)}`);
+print(`7 squared = ${square(7)}`);
+
+// ===== 3. DATA TYPES AND STRUCTURES =====
+print("\n3️⃣ Data Types and Structures");
+print("----------------------------");
+
+// Arrays
+let numbers = [1, 2, 3, 4, 5];
+let colors = ["red", "green", "blue"];
+let mixed = [42, "hello", true, null];
+
+print("Numbers:", numbers);
+print("First color:", colors[0]);
+print("Mixed array:", mixed);
+
+// Objects
+let person = {
+    name: "Charlie",
+    age: 30,
+    skills: ["JavaScript", "NovaLang", "Python"],
+    address: {
+        city: "Seattle",
+        state: "WA"
+    }
+};
+
+print("Person:", person);
+print(`${person.name} lives in ${person.address.city}`);
+print("Skills:", person.skills);
+
+// ===== 4. TEMPLATE LITERALS =====
+print("\n4️⃣ Template Literals with Interpolation");
+print("---------------------------------------");
+
+let product = { name: "Laptop", price: 999.99, discount: 100 };
+let finalPrice = product.price - product.discount;
+
+// Complex template literal
+let productInfo = `
+🛍️  Product Details
+   Name: ${product.name}
+   Original Price: $${product.price}
+   Discount: $${product.discount}
+   Final Price: $${finalPrice}
+   Tax (8.5%): $${finalPrice * 0.085}
+   Total: $${finalPrice + (finalPrice * 0.085)}
+`;
+
+print(productInfo);
+
+// ===== 5. DESTRUCTURING =====
+print("\n5️⃣ Destructuring");
+print("----------------");
+
+// Array destructuring
+let fruits = ["apple", "banana", "orange", "grape"];
+let [first, second, ...rest] = fruits;
+
+print("First fruit:", first);
+print("Second fruit:", second);
+print("Remaining fruits:", rest);
+
+// Object destructuring
+let { name, age: personAge, skills } = person;
+print(`Destructured: ${name} is ${personAge} years old`);
+print("First skill:", skills[0]);
+
+// Nested destructuring
+let { address: { city, state } } = person;
+print(`Location: ${city}, ${state}`);
+
+// ===== 6. SPREAD SYNTAX =====
+print("\n6️⃣ Spread Syntax");
+print("---------------");
+
+// Array spread
+let moreNumbers = [6, 7, 8];
+let allNumbers = [...numbers, ...moreNumbers];
+let withExtra = [0, ...numbers, 100];
+
+print("Original numbers:", numbers);
+print("All numbers:", allNumbers);
+print("With extras:", withExtra);
+
+// Object spread
+let basicInfo = { name: "David", age: 28 };
+let contactInfo = { email: "david@example.com", phone: "555-0123" };
+let fullProfile = { ...basicInfo, ...contactInfo, location: "Portland" };
+
+print("Full profile:", fullProfile);
+
+// ===== 7. CONTROL FLOW =====
+print("\n7️⃣ Control Flow");
+print("---------------");
+
+// Conditional logic
+let score = 85;
+if (score >= 90) {
+    print("Grade: A (Excellent!)");
+} else if (score >= 80) {
+    print("Grade: B (Good job!)");
+} else if (score >= 70) {
+    print("Grade: C (Satisfactory)");
+} else {
+    print("Grade: F (Needs improvement)");
+}
+
+// Loops
+print("\nCountdown:");
+for (let i = 5; i > 0; i = i - 1) {
+    print(`${i}...`);
+}
+print("🚀 Launch!");
+
+// Loop through array
+print("\nFruit inventory:");
+for (let i = 0; i < fruits.length; i = i + 1) {
+    print(`${i + 1}. ${fruits[i]}`);
+}
+
+// ===== 8. COMPLEX DATA MANIPULATION =====
+print("\n8️⃣ Complex Data Manipulation");
+print("----------------------------");
+
+// Array of objects
+let employees = [
+    { name: "Alice", department: "Engineering", salary: 90000 },
+    { name: "Bob", department: "Design", salary: 75000 },
+    { name: "Charlie", department: "Engineering", salary: 95000 },
+    { name: "Diana", department: "Marketing", salary: 70000 }
+];
+
+print("Employee Directory:");
+for (let i = 0; i < employees.length; i = i + 1) {
+    let emp = employees[i];
+    print(`- ${emp.name} (${emp.department}): $${emp.salary}`);
+}
+
+// Find engineering employees
+print("\nEngineering Team:");
+for (let i = 0; i < employees.length; i = i + 1) {
+    let emp = employees[i];
+    if (emp.department === "Engineering") {
+        print(`  🔧 ${emp.name}: $${emp.salary}`);
+    }
+}
+
+// ===== 9. NESTED STRUCTURES =====
+print("\n9️⃣ Nested Structures");
+print("--------------------");
+
+let company = {
+    name: "Tech Innovations Inc.",
+    founded: 2020,
+    departments: {
+        engineering: {
+            head: "Alice",
+            members: ["Bob", "Charlie", "Diana"],
+            projects: [
+                { name: "NovaLang", status: "active", team: ["Alice", "Bob"] },
+                { name: "WebApp", status: "completed", team: ["Charlie"] }
+            ]
+        },
+        marketing: {
+            head: "Eve",
+            members: ["Frank", "Grace"],
+            campaigns: ["Summer Sale", "Product Launch"]
+        }
+    }
+};
+
+// Access nested data
+let { departments: { engineering, marketing } } = company;
+let { projects } = engineering;
+
+print(`Company: ${company.name} (Founded: ${company.founded})`);
+print(`Engineering Head: ${engineering.head}`);
+print(`Active Projects:`);
+
+for (let i = 0; i < projects.length; i = i + 1) {
+    let project = projects[i];
+    if (project.status === "active") {
+        print(`  📋 ${project.name} - Team: ${project.team}`);
+    }
+}
+
+// ===== 10. PRACTICAL EXAMPLE =====
+print("\n🔟 Practical Example: Shopping Cart");
+print("-----------------------------------");
+
+let cart = {
+    items: [
+        { name: "Laptop", price: 999.99, quantity: 1 },
+        { name: "Mouse", price: 24.99, quantity: 2 },
+        { name: "Keyboard", price: 79.99, quantity: 1 }
+    ],
+    discountPercent: 10,
+    taxPercent: 8.5
+};
+
+// Calculate totals
+let subtotal = 0;
+for (let i = 0; i < cart.items.length; i = i + 1) {
+    let item = cart.items[i];
+    let itemTotal = item.price * item.quantity;
+    subtotal = subtotal + itemTotal;
+    print(`${item.name}: $${item.price} x ${item.quantity} = $${itemTotal}`);
+}
+
+let discount = subtotal * (cart.discountPercent / 100);
+let afterDiscount = subtotal - discount;
+let tax = afterDiscount * (cart.taxPercent / 100);
+let finalTotal = afterDiscount + tax;
+
+print(`\n📊 Cart Summary:`);
+print(`Subtotal: $${subtotal}`);
+print(`Discount (${cart.discountPercent}%): -$${discount}`);
+print(`After Discount: $${afterDiscount}`);
+print(`Tax (${cart.taxPercent}%): $${tax}`);
+print(`Final Total: $${finalTotal}`);
+
+// ===== CONCLUSION =====
+print("\n🎉 Demo Complete!");
+print("=================");
+print("This demonstration showed:");
+print("✅ Variables and constants");
+print("✅ Functions (regular and arrow)");
+print("✅ Arrays and objects");
+print("✅ Template literal interpolation");
+print("✅ Destructuring assignment");
+print("✅ Spread syntax");
+print("✅ Control flow (if/else, loops)");
+print("✅ Complex nested data structures");
+print("✅ Real-world application example");
+print("\nNovaLang is ready for serious development! 🚀");

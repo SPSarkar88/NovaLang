@@ -1,0 +1,435 @@
+// NovaLang Complete Tutorial Examples - Step by Step
+// This demonstrates all working features with clear progression
+// Run with: novalang tutorial_examples.sf
+
+print("📚 NovaLang Complete Tutorial - Step by Step");
+print("==============================================");
+
+// ===== LEVEL 1: ABSOLUTE BASICS =====
+print("\n🎯 LEVEL 1: The Absolute Basics");
+print("================================");
+
+// Comments and output
+print("Hello, NovaLang!"); // This is a comment
+print("Learning step by step...");
+
+// Variables
+let name = "Alice";
+let age = 25;
+let isStudent = true;
+
+print("Name:", name);
+print("Age:", age);
+print("Student:", isStudent);
+
+// Constants
+const PI = 3.14159;
+const COMPANY = "Tech Corp";
+print("Pi:", PI);
+print("Company:", COMPANY);
+
+// ===== LEVEL 2: BASIC OPERATIONS =====
+print("\n🎯 LEVEL 2: Basic Operations");
+print("============================");
+
+// Math operations
+let a = 10;
+let b = 3;
+print("10 + 3 =", a + b);
+print("10 - 3 =", a - b);
+print("10 * 3 =", a * b);
+print("10 / 3 =", a / b);
+
+// String operations
+let firstName = "John";
+let lastName = "Doe";
+let fullName = firstName + " " + lastName;
+print("Full name:", fullName);
+
+// Comparisons
+print("10 > 3:", a > b);
+print("10 == 10:", a == 10);
+print("Name is Alice:", name == "Alice");
+
+// ===== LEVEL 3: SIMPLE FUNCTIONS =====
+print("\n🎯 LEVEL 3: Simple Functions");
+print("============================");
+
+// Basic function
+function sayHello() {
+    print("Hello from a function!");
+}
+
+sayHello();
+
+// Function with parameter
+function greet(personName) {
+    print("Hello,", personName);
+}
+
+greet("Bob");
+greet("Carol");
+
+// Function that returns a value
+function add(x, y) {
+    return x + y;
+}
+
+let sum = add(5, 7);
+print("5 + 7 =", sum);
+
+// Function with logic
+function checkAge(userAge) {
+    if (userAge >= 18) {
+        return "Adult";
+    } else {
+        return "Minor";
+    }
+}
+
+print("Age 20:", checkAge(20));
+print("Age 16:", checkAge(16));
+
+// ===== LEVEL 4: CONTROL FLOW =====
+print("\n🎯 LEVEL 4: Control Flow");
+print("========================");
+
+// If statements
+let score = 85;
+if (score >= 90) {
+    print("Grade: A");
+} else if (score >= 80) {
+    print("Grade: B");
+} else if (score >= 70) {
+    print("Grade: C");
+} else {
+    print("Grade: F");
+}
+
+// Logical operators
+let hasTicket = true;
+let ageCheck = 21;
+if (hasTicket && ageCheck >= 18) {
+    print("✅ Entry allowed");
+} else {
+    print("❌ Entry denied");
+}
+
+// For loops
+print("Counting to 5:");
+for (let i = 1; i <= 5; i = i + 1) {
+    print("Count:", i);
+}
+
+print("Countdown:");
+for (let j = 5; j > 0; j = j - 1) {
+    print(j);
+}
+print("🚀 Launch!");
+
+// While loop
+print("Powers of 2:");
+let power = 1;
+let count = 0;
+while (count < 5) {
+    print("2^" + count + " =", power);
+    power = power * 2;
+    count = count + 1;
+}
+
+// ===== LEVEL 5: DATA STRUCTURES =====
+print("\n🎯 LEVEL 5: Arrays and Objects");
+print("==============================");
+
+// Arrays
+let fruits = ["apple", "banana", "orange"];
+let numbers = [10, 20, 30, 40];
+let mixed = ["hello", 42, true];
+
+print("Fruits:", fruits);
+print("First fruit:", fruits[0]);
+print("Numbers:", numbers);
+print("Mixed array:", mixed);
+
+// Working with arrays
+print("All fruits:");
+print("1.", fruits[0]);
+print("2.", fruits[1]);  
+print("3.", fruits[2]);
+
+// Objects
+let person = {
+    name: "Alice",
+    age: 30,
+    city: "Seattle"
+};
+
+print("Person object:", person);
+print("Person name:", person.name);
+print("Person age:", person.age);
+print("Person city:", person.city);
+
+// Nested objects
+let student = {
+    info: {
+        name: "Bob",
+        id: 12345
+    },
+    grades: [85, 92, 78],
+    active: true
+};
+
+print("Student:", student);
+print("Student name:", student.info.name);
+print("Student ID:", student.info.id);
+print("First grade:", student.grades[0]);
+
+// Array of objects
+let users = [
+    { name: "Alice", role: "admin" },
+    { name: "Bob", role: "user" },
+    { name: "Carol", role: "moderator" }
+];
+
+print("All users:", users);
+print("First user:", users[0]);
+print("First user name:", users[0].name);
+
+// ===== LEVEL 6: TEMPLATE LITERALS (Working Version) =====
+print("\n🎯 LEVEL 6: Template Literals");
+print("=============================");
+
+// Simple template literals
+let userName = "Dave";
+let userAge = 28;
+
+// These work with basic variables
+print("Using template: Hello " + userName);
+print("Age in 5 years: " + (userAge + 5));
+
+// For now, using concatenation which definitely works
+let productName = "Laptop";
+let productPrice = 999;
+print("Product: " + productName + " costs $" + productPrice);
+
+// ===== LEVEL 7: DESTRUCTURING (Working Examples) =====
+print("\n🎯 LEVEL 7: Destructuring");
+print("=========================");
+
+// Array destructuring - this works!
+let colors = ["red", "green", "blue"];
+let [firstColor, secondColor, thirdColor] = colors;
+
+print("Destructured colors:");
+print("First:", firstColor);
+print("Second:", secondColor);
+print("Third:", thirdColor);
+
+// Rest elements work too
+let items = ["item1", "item2", "item3", "item4"];
+let [first, ...remaining] = items;
+print("First item:", first);
+print("Remaining items:", remaining);
+
+// Object destructuring - works with simple cases
+let employee = { name: "John", department: "IT", salary: 75000 };
+let { name: empName, department, salary } = employee;
+print("Employee name:", empName);
+print("Department:", department);
+print("Salary:", salary);
+
+// ===== LEVEL 8: SPREAD SYNTAX =====
+print("\n🎯 LEVEL 8: Spread Syntax");
+print("=========================");
+
+// Array spread - works perfectly!
+let arr1 = [1, 2, 3];
+let arr2 = [4, 5, 6];
+let combined = [...arr1, ...arr2];
+print("Array 1:", arr1);
+print("Array 2:", arr2);
+print("Combined:", combined);
+
+// Adding elements while spreading
+let enhanced = [0, ...arr1, 99, ...arr2, 100];
+print("Enhanced array:", enhanced);
+
+// Object spread - works great!
+let basicInfo = { name: "Sarah", age: 32 };
+let contactInfo = { email: "sarah@test.com", phone: "555-9876" };
+let fullInfo = { ...basicInfo, ...contactInfo };
+print("Basic info:", basicInfo);
+print("Contact info:", contactInfo);
+print("Full info:", fullInfo);
+
+// Override properties
+let updatedInfo = { ...basicInfo, age: 33, city: "Portland" };
+print("Updated info:", updatedInfo);
+
+// ===== LEVEL 9: PRACTICAL APPLICATION =====
+print("\n🎯 LEVEL 9: Practical Application");
+print("==================================");
+
+// Scenario: Simple inventory system
+let inventory = [
+    { id: 1, item: "Laptop", price: 1200, stock: 5 },
+    { id: 2, item: "Mouse", price: 25, stock: 20 },
+    { id: 3, item: "Monitor", price: 300, stock: 8 }
+];
+
+print("📦 Inventory System");
+print("==================");
+
+// Display inventory
+function displayItem(product) {
+    print("ID " + product.id + ": " + product.item + " - $" + product.price + " (Stock: " + product.stock + ")");
+}
+
+displayItem(inventory[0]);
+displayItem(inventory[1]);
+displayItem(inventory[2]);
+
+// Process a sale
+function processSale(itemId, quantity) {
+    print("\n🛒 Processing sale for item ID " + itemId + ", quantity: " + quantity);
+    
+    let item = null;
+    if (inventory[0].id == itemId) item = inventory[0];
+    if (inventory[1].id == itemId) item = inventory[1];
+    if (inventory[2].id == itemId) item = inventory[2];
+    
+    if (item) {
+        if (item.stock >= quantity) {
+            let total = item.price * quantity;
+            print("✅ Sale approved: " + quantity + "x " + item.item + " = $" + total);
+            item.stock = item.stock - quantity;
+            print("Remaining stock: " + item.stock);
+        } else {
+            print("❌ Insufficient stock. Available: " + item.stock);
+        }
+    } else {
+        print("❌ Item not found");
+    }
+}
+
+// Test sales
+processSale(1, 2); // 2 laptops
+processSale(2, 5); // 5 mice
+processSale(1, 10); // Too many laptops
+
+print("\n📊 Updated Inventory:");
+displayItem(inventory[0]);
+displayItem(inventory[1]);
+displayItem(inventory[2]);
+
+// ===== LEVEL 10: COMPLEX DATA PROCESSING =====
+print("\n🎯 LEVEL 10: Complex Data Processing");
+print("====================================");
+
+// Customer management system
+let customers = [
+    {
+        id: 1,
+        profile: { name: "Alice Johnson", email: "alice@example.com" },
+        orders: [
+            { id: "ORD001", amount: 150.00, status: "completed" },
+            { id: "ORD002", amount: 75.50, status: "pending" }
+        ]
+    },
+    {
+        id: 2,
+        profile: { name: "Bob Smith", email: "bob@example.com" },
+        orders: [
+            { id: "ORD003", amount: 200.00, status: "completed" }
+        ]
+    }
+];
+
+print("👥 Customer Management System");
+print("=============================");
+
+// Process customer data
+function processCustomer(customer) {
+    let { id, profile, orders } = customer;
+    let { name, email } = profile;
+    
+    print("\nCustomer #" + id + ": " + name);
+    print("Email: " + email);
+    print("Orders:");
+    
+    let totalSpent = 0;
+    
+    // Manually process orders since we know the structure
+    if (orders[0]) {
+        let order = orders[0];
+        print("  - " + order.id + ": $" + order.amount + " (" + order.status + ")");
+        if (order.status == "completed") {
+            totalSpent = totalSpent + order.amount;
+        }
+    }
+    
+    if (orders[1]) {
+        let order = orders[1];
+        print("  - " + order.id + ": $" + order.amount + " (" + order.status + ")");
+        if (order.status == "completed") {
+            totalSpent = totalSpent + order.amount;
+        }
+    }
+    
+    if (orders[2]) {
+        let order = orders[2];
+        print("  - " + order.id + ": $" + order.amount + " (" + order.status + ")");
+        if (order.status == "completed") {
+            totalSpent = totalSpent + order.amount;
+        }
+    }
+    
+    print("Total completed purchases: $" + totalSpent);
+    
+    // Customer tier
+    let tier = "Bronze";
+    if (totalSpent >= 200) {
+        tier = "Gold";
+    } else if (totalSpent >= 100) {
+        tier = "Silver";
+    }
+    print("Customer tier: " + tier);
+    
+    return { name, email, totalSpent, tier };
+}
+
+// Process all customers manually
+let customer1Summary = processCustomer(customers[0]);
+let customer2Summary = processCustomer(customers[1]);
+
+print("\n📈 Customer Summary Report");
+print("==========================");
+print(customer1Summary.name + " (" + customer1Summary.tier + "): $" + customer1Summary.totalSpent);
+print(customer2Summary.name + " (" + customer2Summary.tier + "): $" + customer2Summary.totalSpent);
+
+// ===== COMPLETION =====
+print("\n🎉 TUTORIAL COMPLETE!");
+print("======================");
+print("🏆 You've mastered NovaLang! Here's what you learned:");
+print("");
+print("📚 Level 1: Variables, constants, basic output");
+print("🔢 Level 2: Math operations, string concatenation");
+print("⚙️  Level 3: Functions with parameters and return values");
+print("🔀 Level 4: Conditionals, loops, logical operators");
+print("📊 Level 5: Arrays, objects, nested structures");
+print("💬 Level 6: String manipulation and formatting");
+print("🔄 Level 7: Destructuring for cleaner code");
+print("📤 Level 8: Spread syntax for combining data");
+print("💼 Level 9: Real inventory management system");
+print("🏢 Level 10: Complex customer data processing");
+print("");
+print("🚀 You're now ready to build real applications with NovaLang!");
+print("💡 Try creating your own projects using these concepts.");
+print("");
+print("Next steps:");
+print("• Experiment with combining multiple features");
+print("• Build interactive programs using input()");
+print("• Create your own utility functions");
+print("• Practice with more complex nested data");
+print("");
+print("Happy coding! 🌟");

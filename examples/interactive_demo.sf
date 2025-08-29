@@ -1,0 +1,45 @@
+// Interactive NovaLang Demo - showcasing input/output capabilities
+print("🎮 Interactive NovaLang Demo");
+print("=".repeat(30));
+
+// Get user information
+let name = input("Enter your name: ");
+let age = input("Enter your age: ");
+let hobby = input("What's your favorite hobby? ");
+
+print();
+print("📋 User Information");
+print("=".repeat(20));
+print(`Name: ${name}`);
+print(`Age: ${age}`);
+print(`Hobby: ${hobby}`);
+
+// Simple calculator
+print();
+print("🧮 Simple Calculator");
+print("=".repeat(20));
+
+let num1 = input("Enter first number: ");
+let num2 = input("Enter second number: ");
+
+// Template literals with input values
+print(`${num1} + ${num2} = ${num1}${num2} (concatenated as strings)`);
+print("Note: Math operations would require number conversion!");
+
+// Interactive story
+print();
+print("📚 Mad Libs Story Generator");
+print("=".repeat(30));
+
+let adjective = input("Enter an adjective: ");
+let noun = input("Enter a noun: ");
+let verb = input("Enter a verb: ");
+
+print();
+print("🎭 Your Story:");
+print(`Once upon a time, ${name} found a ${adjective} ${noun}.`);
+print(`They decided to ${verb} with it all day long!`);
+print(`At ${age} years old, this was better than ${hobby}!`);
+
+print();
+print("✨ Demo complete! Thanks for playing with NovaLang!");

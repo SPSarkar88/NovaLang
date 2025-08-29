@@ -1,0 +1,45 @@
+// Built-in functions and Math operations
+
+// Console functions
+console.log("Testing console.log");
+console.error("Testing console.error");
+console.warn("Testing console.warn");
+
+// Type checking
+console.log("typeof 42:", typeof 42);                    // Expected: number
+console.log("typeof 'hello':", typeof "hello");          // Expected: string
+console.log("typeof true:", typeof true);                // Expected: boolean
+console.log("typeof [1,2,3]:", typeof [1, 2, 3]);       // Expected: array
+console.log("typeof {a:1}:", typeof {a: 1});            // Expected: object
+console.log("typeof null:", typeof null);                // Expected: null
+console.log("typeof undefined:", typeof undefined);      // Expected: undefined
+
+// Math functions
+console.log("Math.abs(-15):", Math.abs(-15));           // Expected: 15
+console.log("Math.floor(4.7):", Math.floor(4.7));       // Expected: 4
+console.log("Math.ceil(4.2):", Math.ceil(4.2));         // Expected: 5
+console.log("Math.round(4.6):", Math.round(4.6));       // Expected: 5
+console.log("Math.sqrt(16):", Math.sqrt(16));           // Expected: 4
+console.log("Math.pow(2, 3):", Math.pow(2, 3));         // Expected: 8
+
+let numbers = [5, 2, 8, 1, 9];
+console.log("Math.min(5,2,8,1,9):", Math.min(5, 2, 8, 1, 9));  // Expected: 1
+console.log("Math.max(5,2,8,1,9):", Math.max(5, 2, 8, 1, 9));  // Expected: 9
+
+// Array type checking
+console.log("Array.isArray([1,2,3]):", Array.isArray([1, 2, 3]));     // Expected: true
+console.log("Array.isArray('string'):", Array.isArray("string"));      // Expected: false
+console.log("Array.isArray({a:1}):", Array.isArray({a: 1}));          // Expected: false
+
+// Random number (just test it runs)
+let randomNum = Math.random();
+console.log("Random number generated:", randomNum >= 0 && randomNum < 1);
+
+// Complex example using built-ins
+let data = [-3, 1.7, -8.2, 4.1, -2.9];
+let processedData = [];
+for (let i = 0; i < data.length; i = i + 1) {
+    processedData[i] = Math.round(Math.abs(data[i]));
+}
+console.log("Processed data:", processedData);           // Expected: [3, 2, 8, 4, 3]
+console.log("Max processed:", Math.max(...processedData)); // Expected: 8

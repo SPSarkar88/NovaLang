@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>novalang</AssemblyName>
+    <RootNamespace>NovaLang</RootNamespace>
+    <Version>1.0.0-alpha</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Authors>NovaLang Team</Authors>
+    <Product>NovaLang Interpreter</Product>
+    <Description>A JavaScript-like functional programming language interpreter</Description>
+    <Copyright>Copyright © 2025</Copyright>
+    
+    <!-- Publishing options for standalone executable -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishTrimmed>true</PublishTrimmed>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Exclude test files from main build -->
+    <Compile Remove="tests/**" />
+    <None Include="tests/**" />
+  </ItemGroup>
+
+</Project>

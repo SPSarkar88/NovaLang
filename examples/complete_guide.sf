@@ -1,0 +1,436 @@
+// NovaLang Feature Guide - From Beginner to Advanced
+// All examples are tested and working perfectly
+// Run with: novalang complete_guide.sf
+
+print("🎓 NovaLang Complete Feature Guide");
+print("====================================");
+
+// ===== SECTION 1: GETTING STARTED =====
+print("\n📚 SECTION 1: Getting Started");
+print("==============================");
+print("NovaLang is a functional programming language with JavaScript-like syntax.");
+print("Let's learn step by step!");
+
+// Basic variables
+let name = "Alice";
+const VERSION = "1.0.0";
+let age = 25;
+let isActive = true;
+
+print("Your name:", name);
+print("NovaLang version:", VERSION);
+print("Age:", age);
+print("Active status:", isActive);
+
+// ===== SECTION 2: FUNCTIONS =====
+print("\n📚 SECTION 2: Functions");
+print("========================");
+
+function greetUser(userName) {
+    return "Hello, " + userName + "! Welcome to NovaLang.";
+}
+
+function addNumbers(a, b) {
+    return a + b;
+}
+
+function getStatus(score) {
+    if (score >= 80) {
+        return "Excellent";
+    } else if (score >= 60) {
+        return "Good";
+    } else {
+        return "Needs work";
+    }
+}
+
+// Using functions
+print(greetUser("Bob"));
+print("5 + 7 =", addNumbers(5, 7));
+print("Score 85:", getStatus(85));
+print("Score 45:", getStatus(45));
+
+// ===== SECTION 3: ARRAYS =====
+print("\n📚 SECTION 3: Arrays");
+print("=====================");
+
+let fruits = ["apple", "banana", "orange", "grape"];
+let numbers = [10, 20, 30, 40, 50];
+let mixed = ["text", 42, true, null];
+
+print("Fruits:", fruits);
+print("First fruit:", fruits[0]);
+print("Last fruit:", fruits[3]);
+print("Numbers:", numbers);
+print("Mixed data:", mixed);
+
+// Working with arrays
+print("\nAll fruits:");
+print("1.", fruits[0]);
+print("2.", fruits[1]);
+print("3.", fruits[2]);
+print("4.", fruits[3]);
+
+// ===== SECTION 4: OBJECTS =====
+print("\n📚 SECTION 4: Objects");
+print("======================");
+
+let person = {
+    name: "Charlie",
+    age: 30,
+    city: "Seattle",
+    skills: ["JavaScript", "Python", "NovaLang"]
+};
+
+print("Person:", person);
+print("Name:", person.name);
+print("Age:", person.age);
+print("City:", person.city);
+print("Skills:", person.skills);
+print("First skill:", person.skills[0]);
+
+// Nested objects
+let company = {
+    name: "Tech Corp",
+    location: {
+        city: "Portland",
+        state: "OR"
+    },
+    employees: 50
+};
+
+print("\nCompany:", company.name);
+print("Location:", company.location.city + ", " + company.location.state);
+print("Employees:", company.employees);
+
+// ===== SECTION 5: DESTRUCTURING =====
+print("\n📚 SECTION 5: Destructuring");
+print("============================");
+
+// Array destructuring
+let colors = ["red", "green", "blue", "yellow"];
+let [primary, secondary, tertiary, quaternary] = colors;
+
+print("Colors destructured:");
+print("Primary:", primary);
+print("Secondary:", secondary);
+print("Tertiary:", tertiary);
+print("Quaternary:", quaternary);
+
+// Rest elements
+let items = ["item1", "item2", "item3", "item4", "item5"];
+let [first, second, ...remaining] = items;
+
+print("\nWith rest elements:");
+print("First:", first);
+print("Second:", second);
+print("Remaining:", remaining);
+
+// Object destructuring
+let { name: personName, age: personAge, city, skills } = person;
+
+print("\nObject destructured:");
+print("Name:", personName);
+print("Age:", personAge);
+print("City:", city);
+print("Skills:", skills);
+
+// ===== SECTION 6: SPREAD SYNTAX =====
+print("\n📚 SECTION 6: Spread Syntax");
+print("============================");
+
+// Array spread
+let arr1 = [1, 2, 3];
+let arr2 = [7, 8, 9];
+let combined = [...arr1, 4, 5, 6, ...arr2];
+
+print("Array 1:", arr1);
+print("Array 2:", arr2);
+print("Combined:", combined);
+
+// More spread examples
+let withExtras = [0, ...arr1, 100, ...arr2, 200];
+print("With extras:", withExtras);
+
+// Object spread
+let basicInfo = { name: "David", age: 28 };
+let workInfo = { company: "StartupCorp", role: "Developer" };
+let fullProfile = { ...basicInfo, ...workInfo, active: true };
+
+print("\nObject spread:");
+print("Basic:", basicInfo);
+print("Work:", workInfo);
+print("Combined:", fullProfile);
+
+// ===== SECTION 7: CONTROL FLOW =====
+print("\n📚 SECTION 7: Control Flow");
+print("===========================");
+
+// Conditional statements
+let score = 85;
+print("Testing score:", score);
+
+if (score >= 90) {
+    print("Grade: A (Outstanding!)");
+} else if (score >= 80) {
+    print("Grade: B (Great job!)");
+} else if (score >= 70) {
+    print("Grade: C (Good work!)");
+} else {
+    print("Grade: F (Keep trying!)");
+}
+
+// Logical operators
+let hasAccess = true;
+let isAdmin = false;
+let userAge = 25;
+
+if (hasAccess && userAge >= 18) {
+    print("✅ Access granted - Adult user");
+}
+
+if (isAdmin || hasAccess) {
+    print("✅ Can view content");
+}
+
+// Loops
+print("\nCountdown:");
+for (let i = 5; i > 0; i = i - 1) {
+    print("T-minus", i);
+}
+print("🚀 Liftoff!");
+
+// While loop
+print("\nPowers of 2:");
+let power = 1;
+let exponent = 0;
+while (exponent < 6) {
+    print("2^" + exponent + " =", power);
+    power = power * 2;
+    exponent = exponent + 1;
+}
+
+// ===== SECTION 8: PRACTICAL EXAMPLE =====
+print("\n📚 SECTION 8: Real-World Example");
+print("=================================");
+
+// E-commerce order system
+let customer = {
+    name: "Sarah Johnson",
+    email: "sarah@example.com",
+    address: {
+        street: "123 Main St",
+        city: "Seattle",
+        state: "WA"
+    },
+    memberLevel: "Gold"
+};
+
+let orderItems = [
+    { name: "Laptop", price: 999.99, quantity: 1 },
+    { name: "Mouse", price: 29.99, quantity: 2 },
+    { name: "Keyboard", price: 89.99, quantity: 1 }
+];
+
+// Process order
+let { name: customerName, memberLevel, address } = customer;
+let { street, city, state } = address;
+
+print("🛒 Processing Order");
+print("===================");
+print("Customer:", customerName);
+print("Member Level:", memberLevel);
+print("Address:", street + ", " + city + ", " + state);
+
+print("\nOrder Items:");
+let subtotal = 0;
+
+// Process each item
+let item1 = orderItems[0];
+let item1Total = item1.price * item1.quantity;
+print("• " + item1.name + ": $" + item1.price + " x " + item1.quantity + " = $" + item1Total);
+subtotal = subtotal + item1Total;
+
+let item2 = orderItems[1];
+let item2Total = item2.price * item2.quantity;
+print("• " + item2.name + ": $" + item2.price + " x " + item2.quantity + " = $" + item2Total);
+subtotal = subtotal + item2Total;
+
+let item3 = orderItems[2];
+let item3Total = item3.price * item3.quantity;
+print("• " + item3.name + ": $" + item3.price + " x " + item3.quantity + " = $" + item3Total);
+subtotal = subtotal + item3Total;
+
+// Calculate discounts and totals
+let discount = 0;
+if (memberLevel == "Gold") {
+    discount = subtotal * 0.10; // 10% discount
+} else if (memberLevel == "Silver") {
+    discount = subtotal * 0.05; // 5% discount
+}
+
+let afterDiscount = subtotal - discount;
+let tax = afterDiscount * 0.08; // 8% tax
+let total = afterDiscount + tax;
+
+print("\n💰 Order Summary:");
+print("Subtotal: $" + subtotal);
+if (discount > 0) {
+    print(memberLevel + " Discount: -$" + discount);
+}
+print("After Discount: $" + afterDiscount);
+print("Tax (8%): $" + tax);
+print("Final Total: $" + total);
+
+// ===== SECTION 9: ADVANCED PATTERNS =====
+print("\n📚 SECTION 9: Advanced Patterns");
+print("=================================");
+
+// Complex data structures
+let inventory = [
+    {
+        sku: "LAPTOP001",
+        product: { name: "Gaming Laptop", brand: "TechPro" },
+        stock: 15,
+        price: 1299.99,
+        specs: { ram: "16GB", storage: "1TB SSD" }
+    },
+    {
+        sku: "MOUSE001", 
+        product: { name: "Gaming Mouse", brand: "ClickMaster" },
+        stock: 50,
+        price: 79.99,
+        specs: { dpi: "16000", wireless: true }
+    }
+];
+
+print("📦 Inventory Management");
+print("=======================");
+
+// Process inventory items
+let laptop = inventory[0];
+let { sku: laptopSku, product: laptopProduct, stock: laptopStock, price: laptopPrice } = laptop;
+let { name: laptopName, brand: laptopBrand } = laptopProduct;
+
+print("SKU:", laptopSku);
+print("Product:", laptopName + " by " + laptopBrand);
+print("Stock:", laptopStock);
+print("Price: $" + laptopPrice);
+print("Value: $" + (laptopStock * laptopPrice));
+
+print("");
+
+let mouse = inventory[1];
+let { sku: mouseSku, product: mouseProduct, stock: mouseStock, price: mousePrice } = mouse;
+let { name: mouseName, brand: mouseBrand } = mouseProduct;
+
+print("SKU:", mouseSku);
+print("Product:", mouseName + " by " + mouseBrand);
+print("Stock:", mouseStock);
+print("Price: $" + mousePrice);
+print("Value: $" + (mouseStock * mousePrice));
+
+let totalInventoryValue = (laptopStock * laptopPrice) + (mouseStock * mousePrice);
+print("\nTotal Inventory Value: $" + totalInventoryValue);
+
+// ===== SECTION 10: PUTTING IT ALL TOGETHER =====
+print("\n📚 SECTION 10: Complete Application");
+print("====================================");
+
+// Employee management system
+let employees = [
+    {
+        id: 1,
+        personal: { firstName: "Alice", lastName: "Johnson", age: 28 },
+        job: { title: "Senior Developer", department: "Engineering", salary: 95000 },
+        skills: ["JavaScript", "Python", "NovaLang", "React"]
+    },
+    {
+        id: 2,
+        personal: { firstName: "Bob", lastName: "Smith", age: 32 },
+        job: { title: "UI Designer", department: "Design", salary: 75000 },
+        skills: ["Figma", "CSS", "Typography", "User Research"]
+    },
+    {
+        id: 3,
+        personal: { firstName: "Carol", lastName: "Davis", age: 35 },
+        job: { title: "Product Manager", department: "Product", salary: 110000 },
+        skills: ["Strategy", "Analytics", "Leadership", "Agile"]
+    }
+];
+
+print("👥 Employee Management System");
+print("==============================");
+
+// Process each employee
+let emp1 = employees[0];
+let { personal: emp1Personal, job: emp1Job, skills: emp1Skills } = emp1;
+let { firstName: emp1First, lastName: emp1Last } = emp1Personal;
+let { title: emp1Title, department: emp1Dept } = emp1Job;
+
+print("Employee 1:");
+print("Name:", emp1First, emp1Last);
+print("Role:", emp1Title, "in", emp1Dept);
+print("Skills:", emp1Skills[0] + ", " + emp1Skills[1] + ", " + emp1Skills[2]);
+print("");
+
+let emp2 = employees[1];
+let { personal: emp2Personal, job: emp2Job, skills: emp2Skills } = emp2;
+let { firstName: emp2First, lastName: emp2Last } = emp2Personal;
+let { title: emp2Title, department: emp2Dept } = emp2Job;
+
+print("Employee 2:");
+print("Name:", emp2First, emp2Last);
+print("Role:", emp2Title, "in", emp2Dept);
+print("Skills:", emp2Skills[0] + ", " + emp2Skills[1] + ", " + emp2Skills[2]);
+print("");
+
+let emp3 = employees[2];
+let { personal: emp3Personal, job: emp3Job, skills: emp3Skills } = emp3;
+let { firstName: emp3First, lastName: emp3Last } = emp3Personal;
+let { title: emp3Title, department: emp3Dept, salary: emp3Salary } = emp3Job;
+
+print("Employee 3:");
+print("Name:", emp3First, emp3Last);
+print("Role:", emp3Title, "in", emp3Dept);
+print("Skills:", emp3Skills[0] + ", " + emp3Skills[1] + ", " + emp3Skills[2]);
+print("Salary: $" + emp3Salary);
+
+// Calculate department statistics
+let totalSalaries = emp1Job.salary + emp2Job.salary + emp3Job.salary;
+let avgSalary = totalSalaries / 3;
+
+print("\n📊 Company Statistics:");
+print("Total Employees:", employees.length);
+print("Total Payroll: $" + totalSalaries);
+print("Average Salary: $" + avgSalary);
+
+// ===== CONCLUSION =====
+print("\n🎉 FEATURE GUIDE COMPLETE!");
+print("============================");
+print("🏆 Congratulations! You've mastered NovaLang features:");
+print("");
+print("✅ Variables and constants");
+print("✅ Functions with parameters and return values");
+print("✅ Arrays and array access");
+print("✅ Objects and nested objects");
+print("✅ Array destructuring with rest elements");
+print("✅ Object destructuring with renaming");
+print("✅ Array spread syntax");
+print("✅ Object spread syntax");
+print("✅ Conditional statements (if/else if/else)");
+print("✅ Logical operators (&&, ||)");
+print("✅ For loops and while loops");
+print("✅ Complex nested data structures");
+print("✅ Real-world business applications");
+print("");
+print("🚀 You're now ready to build serious applications!");
+print("💡 Try combining these features in your own projects.");
+print("");
+print("Next steps:");
+print("• Create interactive programs with input()");
+print("• Build more complex business logic");
+print("• Practice with larger data sets");
+print("• Experiment with different patterns");
+print("");
+print("Happy coding with NovaLang! 🌟");

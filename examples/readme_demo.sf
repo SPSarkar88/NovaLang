@@ -1,0 +1,61 @@
+// README Example Script - Complete NovaLang Feature Showcase
+console.log("🚀 NovaLang Feature Demo");
+
+// Variables and data types
+let userName = "Alice";
+const userAge = 28;
+let isActive = true;
+
+// Arrays and objects with spread
+let skills = ["JavaScript", "C#", "Python"];
+let moreSkills = ["React", "Node.js"];
+let allSkills = [...skills, ...moreSkills, "NovaLang"];
+
+let profile = {
+    name: userName,
+    age: userAge,
+    active: isActive
+};
+
+let extendedProfile = {
+    ...profile,
+    skills: allSkills,
+    level: "Senior"
+};
+
+// Destructuring
+let {name, age, active} = extendedProfile;
+let [primarySkill, secondarySkill, ...otherSkills] = allSkills;
+
+// Template literals with interpolation
+let summary = `
+User Profile Summary
+====================
+Name: ${name}
+Age: ${age}
+Status: ${active}
+Primary Skill: ${primarySkill}
+`;
+
+// Functions
+function calculateExperience(currentAge, startAge) {
+    let yearsExp = currentAge - startAge;
+    return yearsExp;
+}
+
+let experience = calculateExperience(age, 22);
+
+// Control flow
+if (experience > 5) {
+    console.log(`${name} is a senior developer with ${experience} years experience`);
+} else {
+    console.log(`${name} is building experience`);
+}
+
+// Output results
+console.log(summary);
+console.log("Extended Profile:", extendedProfile);
+console.log("All Skills:", allSkills);
+console.log("Primary Skill:", primarySkill);
+console.log("Other Skills:", otherSkills);
+console.log("✅ README Demo complete!");

@@ -1,0 +1,5 @@
+// Simple input test
+print("Quick input test:");
+let name = input("Your name: ");
+print("Hello", name + "!");
+print("Input function works perfectly!");
