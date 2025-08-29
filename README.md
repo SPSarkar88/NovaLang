@@ -1,7 +1,7 @@
 ﻿# NovaLang - JavaScript-like Functional Programming Language
 
 <div align="center">
-  <img src="logo/NOVA LANG.png" alt="NovaLang Logo" width="200"/>
+  <img src="logo/NOVA LANG.png" alt="NovaLang Logo" width="400"/>
   <br/>
   <em>Making functional programming accessible with familiar syntax!</em>
 </div>
