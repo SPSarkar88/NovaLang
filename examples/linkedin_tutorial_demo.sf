@@ -1,0 +1,234 @@
+// ===================================================================
+// 🚀 NovaLang LinkedIn Tutorial - Interactive Demo
+// ===================================================================
+// Run this file to see all tutorial concepts in action!
+// Command: novalang.exe examples/linkedin_tutorial_demo.sf
+
+console.log("🚀 NovaLang LinkedIn Tutorial - Interactive Demo");
+console.log("================================================");
+console.log();
+
+// ===================================================================
+// Step 1: Basic Introduction
+// ===================================================================
+console.log("📚 STEP 1: Basic Introduction");
+console.log("------------------------------");
+
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+console.log("Original numbers:", numbers);
+
+// Magic strings - the easy way
+let evens = Lambda.filter(numbers, "even");
+let doubled = Lambda.map(numbers, "double");
+
+console.log("Even numbers (magic string):", evens);
+console.log("Doubled values (magic string):", doubled);
+console.log();
+
+// ===================================================================
+// Step 2: BREAKTHROUGH - Custom Functions
+// ===================================================================
+console.log("🔥 STEP 2: BREAKTHROUGH - Custom Functions");
+console.log("-------------------------------------------");
+
+// Custom filter function
+let isDivisibleByThree = function(value) {
+    return value % 3 == 0;
+};
+
+// Custom mapper function
+let addTen = function(value) {
+    return value + 10;
+};
+
+// Use custom functions with Lambda operations
+let divisibleByThree = Lambda.filterWithEvaluator(numbers, isDivisibleByThree);
+let addedTen = Lambda.mapWithEvaluator(numbers, addTen);
+
+console.log("Divisible by 3 (custom function):", divisibleByThree);
+console.log("Added 10 (custom function):", addedTen);
+console.log();
+
+// ===================================================================
+// Step 3: Real-World Business Example
+// ===================================================================
+console.log("💼 STEP 3: Real-World Business Example");
+console.log("---------------------------------------");
+
+// Employee salary data
+let salaries = [45000, 52000, 38000, 75000, 82000, 41000, 67000, 55000];
+console.log("Employee salaries:", salaries);
+
+// Find high performers (salary > 50k)
+let highPerformers = function(salary) {
+    return salary > 50000;
+};
+
+// Calculate bonus (10% for high performers, 5% for others)
+let calculateBonus = function(salary) {
+    if (salary > 50000) {
+        return salary * 0.10;  // 10% bonus
+    } else {
+        return salary * 0.05;  // 5% bonus
+    }
+};
+
+// Apply business logic
+let highPerformerSalaries = Lambda.filterWithEvaluator(salaries, highPerformers);
+let allBonuses = Lambda.mapWithEvaluator(salaries, calculateBonus);
+let totalBonuses = Lambda.sum(allBonuses);
+
+console.log("High performer salaries:", highPerformerSalaries);
+console.log("All bonuses:", allBonuses);
+console.log("Total bonus budget:", totalBonuses);
+console.log();
+
+// ===================================================================
+// Step 4: String Processing
+// ===================================================================
+console.log("🎨 STEP 4: String Processing");
+console.log("-----------------------------");
+
+let productNames = ["smartphone", "laptop", "tablet", "headphones"];
+console.log("Product names:", productNames);
+
+// Custom string processing
+let capitalizeName = function(name) {
+    let first = name.charAt(0).toUpperCase();
+    let rest = name.slice(1);
+    return first + rest;
+};
+
+let addPrefix = function(name) {
+    return "Product: " + name;
+};
+
+let isLongName = function(name) {
+    return name.length > 6;
+};
+
+// Apply string transformations
+let capitalizedNames = Lambda.mapWithEvaluator(productNames, capitalizeName);
+let productLabels = Lambda.mapWithEvaluator(capitalizedNames, addPrefix);
+let longNames = Lambda.filterWithEvaluator(productNames, isLongName);
+
+console.log("Capitalized:", capitalizedNames);
+console.log("With labels:", productLabels);
+console.log("Long names:", longNames);
+console.log();
+
+// ===================================================================
+// Step 5: Pipeline Processing
+// ===================================================================
+console.log("🏗️ STEP 5: Pipeline Processing");
+console.log("-------------------------------");
+
+let salesData = [120, 85, 200, 45, 180, 95, 150, 75, 220, 110];
+console.log("Sales data:", salesData);
+
+// Pipeline: filter > square > sort > take top 3
+let result = Lambda.pipeline(salesData,
+    ["filter", "gt100"],    // Greater than 100
+    ["map", "square"],      // Square the values
+    ["sort", "desc"],       // Sort descending
+    ["take", "3"]           // Take top 3
+);
+
+console.log("Pipeline result (top 3 squared sales >100):", result);
+console.log();
+
+// ===================================================================
+// Step 6: Data Analysis Challenge
+// ===================================================================
+console.log("📊 STEP 6: Data Analysis Challenge");
+console.log("-----------------------------------");
+
+let testScores = [85, 92, 78, 96, 82, 88, 91, 79, 94, 87];
+console.log("Test scores:", testScores);
+
+// Custom analysis functions
+let isHighAchiever = function(score) {
+    return score >= 90;
+};
+
+let calculateGrade = function(score) {
+    if (score >= 90) return "A";
+    if (score >= 80) return "B";
+    if (score >= 70) return "C";
+    if (score >= 60) return "D";
+    return "F";
+};
+
+let improvementNeeded = function(score) {
+    return score < 85;
+};
+
+// Analyze performance
+let highAchievers = Lambda.filterWithEvaluator(testScores, isHighAchiever);
+let grades = Lambda.mapWithEvaluator(testScores, calculateGrade);
+let needsImprovement = Lambda.filterWithEvaluator(testScores, improvementNeeded);
+let classAverage = Lambda.average(testScores);
+
+console.log("High achievers (>=90):", highAchievers);
+console.log("All grades:", grades);
+console.log("Needs improvement (<85):", needsImprovement);
+console.log("Class average:", classAverage);
+console.log();
+
+// ===================================================================
+// Step 7: Performance with Large Dataset
+// ===================================================================
+console.log("⚡ STEP 7: Performance Demo");
+console.log("---------------------------");
+
+// Generate larger dataset
+let largeNumbers = [];
+for (let i = 1; i <= 100; i++) {
+    largeNumbers.push(i);
+}
+
+console.log("Processing 100 numbers...");
+
+// Complex custom logic
+let isPrimeSmall = function(n) {
+    if (n < 2) return false;
+    if (n == 2) return true;
+    if (n % 2 == 0) return false;
+    for (let i = 3; i < n; i += 2) {
+        if (n % i == 0) return false;
+    }
+    return true;
+};
+
+let primes = Lambda.filterWithEvaluator(largeNumbers, isPrimeSmall);
+console.log("Prime numbers (1-100):", primes);
+console.log("Total primes found:", primes.length);
+console.log();
+
+// ===================================================================
+// Summary: What Makes This Special
+// ===================================================================
+console.log("🎉 TUTORIAL COMPLETE - What Makes NovaLang Special?");
+console.log("===================================================");
+console.log();
+console.log("✅ JavaScript-like syntax everyone understands");
+console.log("✅ BREAKTHROUGH: Custom functions work perfectly");
+console.log("✅ Magic strings for rapid prototyping");  
+console.log("✅ Pipeline processing for complex workflows");
+console.log("✅ Real-world business logic implementation");
+console.log("✅ String processing capabilities");
+console.log("✅ Performance with large datasets");
+console.log("✅ Clean, readable, maintainable code");
+console.log();
+console.log("🚀 Ready to share your NovaLang journey on LinkedIn!");
+console.log();
+console.log("📱 LinkedIn Post Idea:");
+console.log('🔥 Just mastered functional programming with NovaLang!');
+console.log('✅ Built custom functions that integrate seamlessly');
+console.log('✅ Processed real business data with elegant pipelines');
+console.log('✅ Solved complex problems with readable code');
+console.log();
+console.log('The breakthrough function parameter support is game-changing!');
+console.log('#FunctionalProgramming #NovaLang #DataScience #Innovation');
+console.log();
+console.log("🎯 Your functional programming journey starts here!");
