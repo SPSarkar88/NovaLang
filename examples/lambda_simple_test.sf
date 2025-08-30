@@ -1,0 +1,27 @@
+// Simple Lambda Test
+print("Testing basic Lambda operations...");
+
+let numbers = [1, 2, 3, 4, 5];
+print("Numbers:", numbers);
+
+// Test Lambda.filter for even numbers
+print("Testing Lambda.filter...");
+let evens = Lambda.filter(numbers, "even");
+print("Even numbers:", evens);
+
+// Test Lambda.map to double numbers  
+print("Testing Lambda.map...");
+let doubled = Lambda.map(numbers, "double");
+print("Doubled:", doubled);
+
+// Test Lambda.sort descending
+print("Testing Lambda.sort...");
+let sorted = Lambda.sort(numbers, "desc");
+print("Sorted descending:", sorted);
+
+// Test Lambda.sum
+print("Testing Lambda.sum...");
+let total = Lambda.sum(numbers);
+print("Sum:", total);
+
+print("Lambda basic test complete!");

@@ -10,20 +10,27 @@
 
 A modern, functional programming language built in **C#/.NET 9.0** with JavaScript-like syntax and advanced language features.
 
-## 🆕 Latest Updates - Collections Release!
+## 🆕 Latest Updates - Collections & Lambda Release!
 
-**🎉 NEW in v1.0.0-alpha: Enterprise-Grade Collection Types**
+**🎉 NEW in v1.0.0-alpha: Enterprise-Grade Collections + Lambda Operations**
 
-NovaLang now includes **9 comprehensive collection types** implemented as functional APIs:
+NovaLang now includes **9 comprehensive collection types** + **13 Lambda query operations** implemented as functional APIs:
 
+**Collections:**
 - **ArrayList, Hashtable, Queue, Stack, SortedList, List, Dictionary, SortedDictionary, HashSet**
 - **Fully functional approach** - No OOP complexity, just pure function calls
 - **Type flexible** - Works with all NovaLang value types (strings, numbers, objects, arrays)
 - **Production tested** - 50+ test cases covering all operations and edge cases
 - **Enterprise ready** - Sophisticated data structures for real-world applications
 
+**Lambda Operations:**
+- **13 powerful operations** - filter, map, sort, count, sum, average, min, max, first, last, skip, take, distinct, reverse
+- **Universal compatibility** - Works with arrays and all collection types
+- **Chainable design** - Operations return new collections for complex data pipelines
+- **Intuitive API** - Simple string-based operation names (`"even"`, `"double"`, `"desc"`)
+
 ```javascript
-// Example: Multi-collection data management
+// Example: Multi-collection data processing with Lambda
 let inventory = Dictionary.create();
 let reorderQueue = Queue.create(); 
 let categories = HashSet.create();
@@ -32,16 +39,21 @@ Dictionary.set(inventory, "laptop", {price: 999, stock: 10});
 Queue.enqueue(reorderQueue, "laptop");
 HashSet.add(categories, "Electronics");
 
-print("Inventory ready for enterprise applications!");
+// Process with Lambda operations
+let highValueItems = Lambda.filter(Dictionary.values(inventory), "positive");
+let doubled = Lambda.map(highValueItems, "double");
+let topItems = Lambda.take(Lambda.sort(doubled, "desc"), 3);
+
+print("Enterprise data processing ready!");
 ```
 
-**📚 Try it now:** `novalang.exe examples/collections_demo.sf` *(standalone)* or `dotnet run run examples/collections_demo.sf` *(development)*
+**📚 Try it now:** `novalang.exe examples/lambda_demo.sf` *(Lambda operations)* | `novalang.exe examples/collections_demo.sf` *(Collections)*
 
 ---
 
 ## 📋 Table of Contents
 
-- [🆕 Latest Updates - Collections Release](#-latest-updates---collections-release)
+- [🆕 Latest Updates - Collections & Lambda Release](#-latest-updates---collections--lambda-release)
 - [🚀 Project Status](#-project-status-production-ready---v100-alpha)
 - [🎯 Language Features](#-language-features)
   - [🏗️ Technical Architecture](#️-technical-architecture)
@@ -49,6 +61,7 @@ print("Inventory ready for enterprise applications!");
 - [⚡ Quick Start](#-quick-start)
 - [📖 Complete Language Reference](#-complete-language-reference)
   - [Collection Types - Functional Approach](#collection-types---functional-approach-)
+  - [Lambda Query Operations - Functional Data Processing](#lambda-query-operations---functional-data-processing-)
 - [📚 Essential Examples Collection](#-essential-examples-collection)
 
 ## 🔧 M3 Implementation Summary
@@ -197,7 +210,7 @@ let age = input("Age: ");                 // Interactive programs
 - ✅ **Values**: Full runtime type system (Number, String, Boolean, Array, Object, Function)
 - ✅ **Control Flow**: if/else, loops (for/while), function calls, returns, switch/case
 - ✅ **Functions**: User-defined functions with closures and first-class function support
-- ✅ **Built-ins**: Console.log, Math operations, Array/Object utilities, **9 Collection Types**
+- ✅ **Built-ins**: Console.log, Math operations, Array/Object utilities, **9 Collection Types**, **13 Lambda Query Operations**
 - ✅ **M3 Advanced Features**: [Spread syntax, destructuring, template literals](#-m3-advanced-features---production-validated) with interpolation
 - ✅ **Error Handling**: try/catch/throw with proper exception handling
 - ✅ **REPL**: Interactive shell for development and testing
@@ -284,6 +297,7 @@ let {name, age, ...others} = {name: "Bob", age: 25, city: "NYC", job: "Dev"};
 
 - 🔹 **JavaScript-like syntax** with functional programming principles
 - 🔹 **9 Enterprise Collection Types** - ArrayList, Hashtable, Queue, Stack, SortedList, List, Dictionary, SortedDictionary, HashSet
+- 🔍 **Lambda-Style Query Operations** - filter, map, sort, count, sum, average, min, max, skip, take, distinct, reverse (13 operations)
 - 🔹 **Immutability by default** with opt-in mutation
 - 🔹 **First-class functions** and closures
 - 🔹 **Lexical scoping** and proper variable binding
@@ -306,8 +320,12 @@ copy .\bin\Release\net9.0\win-x64\publish\novalang.exe .\novalang.exe
 # 3. Try the complete tutorial (recommended!)
 .\novalang.exe examples\complete_guide.sf
 
-# 4. NEW: Explore enterprise collections (⭐ Featured!)
+# 4. NEW: Explore enterprise collections with Lambda (⭐ Featured!)
 .\novalang.exe examples\collections_demo.sf
+# 4. NEW: Explore enterprise collections with Lambda (⭐ Featured!)
+
+.
+ovalang.exe examples\lambda_demo.sf
 
 # 5. Try interactive examples
 .\novalang.exe examples\interactive_demo.sf
@@ -781,6 +799,345 @@ print("Tasks remaining:", Queue.size(pendingTasks));
 - ✅ **Composable**: Collections work seamlessly together
 - ✅ **Intuitive**: Familiar operations from other programming languages
 
+---
+
+### Lambda Query Operations - Functional Data Processing ✨
+
+NovaLang provides **13 powerful Lambda operations** for functional data processing. These operations work with arrays and all collection types, enabling sophisticated data transformations and queries using a simple, intuitive API.
+
+*For comprehensive Lambda examples, see [lambda_demo.sf](examples/lambda_demo.sf) in the examples.*
+
+#### 🔍 **Filtering Operations**
+
+**`Lambda.filter(collection, filterType)`** - Filter elements based on conditions
+```javascript
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// Filter even numbers
+let evens = Lambda.filter(numbers, "even");
+console.log(evens); // [2, 4, 6, 8, 10]
+
+// Filter odd numbers  
+let odds = Lambda.filter(numbers, "odd");
+console.log(odds); // [1, 3, 5, 7, 9]
+
+// Filter positive numbers
+let mixed = [-2, -1, 0, 1, 2];
+let positives = Lambda.filter(mixed, "positive");
+console.log(positives); // [1, 2]
+
+// Filter negative numbers
+let negatives = Lambda.filter(mixed, "negative");
+console.log(negatives); // [-2, -1]
+
+// Filter non-empty strings
+let words = ["hello", "", "world", "", "lambda"];
+let nonEmpty = Lambda.filter(words, "nonEmpty");
+console.log(nonEmpty); // ["hello", "world", "lambda"]
+
+// Filter truthy values
+let values = [0, 1, false, true, "", "text", null, undefined];
+let truthy = Lambda.filter(values, "truthy");
+console.log(truthy); // [1, true, "text"]
+```
+
+#### 🔄 **Transformation Operations**
+
+**`Lambda.map(collection, operation)`** - Transform each element
+```javascript
+let numbers = [1, 2, 3, 4, 5];
+
+// Double all numbers
+let doubled = Lambda.map(numbers, "double");
+console.log(doubled); // [2, 4, 6, 8, 10]
+
+// Square all numbers
+let squared = Lambda.map(numbers, "square");
+console.log(squared); // [1, 4, 9, 16, 25]
+
+// Get absolute values
+let mixed = [-3, -1, 0, 1, 3];
+let absolute = Lambda.map(mixed, "abs");
+console.log(absolute); // [3, 1, 0, 1, 3]
+
+// String transformations
+let words = ["hello", "world", "lambda"];
+let uppercase = Lambda.map(words, "upper");
+console.log(uppercase); // ["HELLO", "WORLD", "LAMBDA"]
+
+let lowercase = Lambda.map(words, "lower");
+console.log(lowercase); // ["hello", "world", "lambda"]
+
+// Get string lengths
+let lengths = Lambda.map(words, "length");
+console.log(lengths); // [5, 5, 6]
+
+// Works with arrays too
+let arrays = [[1, 2], [3, 4, 5], [6]];
+let arrayLengths = Lambda.map(arrays, "length");
+console.log(arrayLengths); // [2, 3, 1]
+```
+
+#### 📈 **Sorting Operations**
+
+**`Lambda.sort(collection, direction)`** - Sort elements in ascending/descending order
+```javascript
+let unsorted = [5, 2, 8, 1, 9, 3];
+
+// Sort ascending (default)
+let ascending = Lambda.sort(unsorted, "asc");
+console.log(ascending); // [1, 2, 3, 5, 8, 9]
+
+// Sort descending
+let descending = Lambda.sort(unsorted, "desc");
+console.log(descending); // [9, 8, 5, 3, 2, 1]
+
+// Works with strings too
+let words = ["zebra", "apple", "banana", "cherry"];
+let sortedWords = Lambda.sort(words, "asc");
+console.log(sortedWords); // ["apple", "banana", "cherry", "zebra"]
+```
+
+#### 📊 **Aggregation Operations**
+
+**`Lambda.count(collection)`** - Count elements
+```javascript
+let items = [1, 2, 3, 4, 5];
+let count = Lambda.count(items);
+console.log(count); // 5
+
+// Works with any collection
+let queue = Queue.create();
+Queue.enqueue(queue, "a");
+Queue.enqueue(queue, "b");
+let queueCount = Lambda.count(queue);
+console.log(queueCount); // 2
+```
+
+**`Lambda.sum(collection)`** - Sum numeric values
+```javascript
+let numbers = [10, 20, 30, 40, 50];
+let total = Lambda.sum(numbers);
+console.log(total); // 150
+
+// Mixed types - only numbers are summed
+let mixed = [10, "text", 20, true, 30];
+let sum = Lambda.sum(mixed);
+console.log(sum); // 60
+```
+
+**`Lambda.average(collection)`** - Calculate average of numeric values
+```javascript
+let scores = [85, 92, 78, 96, 89];
+let avg = Lambda.average(scores);
+console.log(avg); // 88
+
+// Empty collection returns 0
+let empty = [];
+let emptyAvg = Lambda.average(empty);
+console.log(emptyAvg); // 0
+```
+
+**`Lambda.min(collection)` / `Lambda.max(collection)`** - Find minimum/maximum values
+```javascript
+let numbers = [45, 12, 89, 23, 67];
+
+let minimum = Lambda.min(numbers);
+console.log(minimum); // 12
+
+let maximum = Lambda.max(numbers);
+console.log(maximum); // 89
+
+// Works with strings (alphabetical comparison)
+let words = ["zebra", "apple", "banana"];
+let minWord = Lambda.min(words);
+let maxWord = Lambda.max(words);
+console.log(minWord); // "apple"
+console.log(maxWord); // "zebra"
+```
+
+#### 🎯 **Position Operations**
+
+**`Lambda.first(collection)` / `Lambda.last(collection)`** - Get first/last elements
+```javascript
+let items = ["first", "second", "third", "fourth", "fifth"];
+
+let first = Lambda.first(items);
+console.log(first); // "first"
+
+let last = Lambda.last(items);
+console.log(last); // "fifth"
+
+// Returns null for empty collections
+let empty = [];
+let noFirst = Lambda.first(empty);
+console.log(noFirst); // null
+```
+
+**`Lambda.skip(collection, count)`** - Skip first N elements
+```javascript
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// Skip first 3 elements
+let skipped = Lambda.skip(numbers, 3);
+console.log(skipped); // [4, 5, 6, 7, 8, 9, 10]
+
+// Skip more than available
+let skipAll = Lambda.skip(numbers, 15);
+console.log(skipAll); // []
+```
+
+**`Lambda.take(collection, count)`** - Take first N elements
+```javascript
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// Take first 5 elements
+let taken = Lambda.take(numbers, 5);
+console.log(taken); // [1, 2, 3, 4, 5]
+
+// Take more than available
+let takeAll = Lambda.take([1, 2, 3], 10);
+console.log(takeAll); // [1, 2, 3]
+```
+
+#### 🔧 **Utility Operations**
+
+**`Lambda.distinct(collection)`** - Remove duplicate elements
+```javascript
+let duplicates = [1, 2, 2, 3, 3, 3, 4, 4, 5];
+let unique = Lambda.distinct(duplicates);
+console.log(unique); // [1, 2, 3, 4, 5]
+
+// Works with strings
+let words = ["apple", "banana", "apple", "cherry", "banana"];
+let uniqueWords = Lambda.distinct(words);
+console.log(uniqueWords); // ["apple", "banana", "cherry"]
+```
+
+**`Lambda.reverse(collection)`** - Reverse element order
+```javascript
+let numbers = [1, 2, 3, 4, 5];
+let reversed = Lambda.reverse(numbers);
+console.log(reversed); // [5, 4, 3, 2, 1]
+
+let words = ["first", "second", "third"];
+let reversedWords = Lambda.reverse(words);
+console.log(reversedWords); // ["third", "second", "first"]
+```
+
+#### 🔗 **Chaining Lambda Operations**
+
+Lambda operations return new arrays/collections, enabling powerful chaining patterns:
+
+```javascript
+// Complex data processing pipeline
+let rawData = [-5, -2, 0, 1, 3, 4, 6, 8, 10, 12, 15];
+
+// Filter positives → square them → sort descending → take top 5 → sum
+let result = Lambda.sum(
+    Lambda.take(
+        Lambda.sort(
+            Lambda.map(
+                Lambda.filter(rawData, "positive"), 
+                "square"
+            ), 
+            "desc"
+        ), 
+        5
+    )
+);
+console.log(result); // Sum of [225, 144, 100, 64, 36] = 569
+
+// Step-by-step breakdown for clarity:
+let positives = Lambda.filter(rawData, "positive");     // [1, 3, 4, 6, 8, 10, 12, 15]
+let squared = Lambda.map(positives, "square");          // [1, 9, 16, 36, 64, 100, 144, 225]
+let sorted = Lambda.sort(squared, "desc");              // [225, 144, 100, 64, 36, 16, 9, 1]
+let top5 = Lambda.take(sorted, 5);                      // [225, 144, 100, 64, 36]
+let finalSum = Lambda.sum(top5);                        // 569
+```
+
+#### 📊 **Lambda with Collections Integration**
+
+Lambda operations work seamlessly with all NovaLang collection types:
+
+```javascript
+// Working with ArrayList
+let arrayList = ArrayList.create();
+ArrayList.add(arrayList, 10);
+ArrayList.add(arrayList, 20);
+ArrayList.add(arrayList, 30);
+
+let doubled = Lambda.map(arrayList, "double");
+console.log(doubled); // [20, 40, 60]
+
+// Working with Dictionary values
+let dict = Dictionary.create();
+Dictionary.set(dict, "a", 5);
+Dictionary.set(dict, "b", 15);
+Dictionary.set(dict, "c", 25);
+
+let values = Dictionary.values(dict);        // [5, 15, 25]  
+let filtered = Lambda.filter(values, "even");  // []
+let sum = Lambda.sum(values);                // 45
+
+// Working with Queue
+let queue = Queue.create();
+Queue.enqueue(queue, "task1");
+Queue.enqueue(queue, "task2");
+Queue.enqueue(queue, "task3");
+
+let queueCount = Lambda.count(queue);        // 3
+let first = Lambda.first(queue);             // "task1"
+
+// Working with HashSet
+let hashSet = HashSet.create();
+HashSet.add(hashSet, "apple");
+HashSet.add(hashSet, "banana");
+HashSet.add(hashSet, "cherry");
+
+let setArray = HashSet.toArray(hashSet);
+let lengths = Lambda.map(setArray, "length"); // [5, 6, 6]
+let avgLength = Lambda.average(lengths);      // 5.67
+```
+
+#### 📋 **Complete Lambda Operations Reference**
+
+| Operation | Purpose | Example |
+|-----------|---------|---------|
+| `Lambda.filter(data, "even")` | Filter even numbers | `[1,2,3,4] → [2,4]` |
+| `Lambda.filter(data, "odd")` | Filter odd numbers | `[1,2,3,4] → [1,3]` |
+| `Lambda.filter(data, "positive")` | Filter positive numbers | `[-1,0,1,2] → [1,2]` |
+| `Lambda.filter(data, "negative")` | Filter negative numbers | `[-1,0,1,2] → [-1]` |
+| `Lambda.filter(data, "nonEmpty")` | Filter non-empty strings | `["a","","b"] → ["a","b"]` |
+| `Lambda.filter(data, "truthy")` | Filter truthy values | `[0,1,"",true] → [1,true]` |
+| `Lambda.map(data, "double")` | Double each number | `[1,2,3] → [2,4,6]` |
+| `Lambda.map(data, "square")` | Square each number | `[1,2,3] → [1,4,9]` |
+| `Lambda.map(data, "abs")` | Absolute value | `[-1,2,-3] → [1,2,3]` |
+| `Lambda.map(data, "upper")` | Uppercase strings | `["hi"] → ["HI"]` |
+| `Lambda.map(data, "lower")` | Lowercase strings | `["HI"] → ["hi"]` |
+| `Lambda.map(data, "length")` | Get lengths | `["hi","bye"] → [2,3]` |
+| `Lambda.sort(data, "asc")` | Sort ascending | `[3,1,2] → [1,2,3]` |
+| `Lambda.sort(data, "desc")` | Sort descending | `[1,2,3] → [3,2,1]` |
+| `Lambda.count(data)` | Count elements | `[1,2,3] → 3` |
+| `Lambda.sum(data)` | Sum numbers | `[1,2,3] → 6` |
+| `Lambda.average(data)` | Average of numbers | `[1,2,3] → 2` |
+| `Lambda.min(data)` | Minimum value | `[3,1,2] → 1` |
+| `Lambda.max(data)` | Maximum value | `[3,1,2] → 3` |
+| `Lambda.first(data)` | First element | `[1,2,3] → 1` |
+| `Lambda.last(data)` | Last element | `[1,2,3] → 3` |
+| `Lambda.skip(data, n)` | Skip first n | `([1,2,3,4], 2) → [3,4]` |
+| `Lambda.take(data, n)` | Take first n | `([1,2,3,4], 2) → [1,2]` |
+| `Lambda.distinct(data)` | Remove duplicates | `[1,1,2,2] → [1,2]` |
+| `Lambda.reverse(data)` | Reverse order | `[1,2,3] → [3,2,1]` |
+
+**Key Benefits:**
+- ✅ **Functional Paradigm**: Pure functions with no side effects
+- ✅ **Universal Compatibility**: Works with arrays and all 9 collection types
+- ✅ **Chainable**: Operations return new collections for easy chaining
+- ✅ **Type Safe**: Handles mixed data types gracefully
+- ✅ **Intuitive**: Simple string-based operation names
+- ✅ **Performance Optimized**: Efficient implementation using .NET LINQ under the hood
+
 ## 🛠️ Getting Started
 
 ### Prerequisites
@@ -820,9 +1177,10 @@ novalang.exe script.sf
 # Start interactive REPL
 novalang.exe repl
 
-# 🆕 Run the 8 essential examples (featuring NEW collections!):
+# 🆕 Run the 9 essential examples (featuring NEW collections + Lambda!):
 novalang.exe examples/complete_guide.sf         # Comprehensive tutorial (recommended start)
 novalang.exe examples/collections_demo.sf       # 🆕 NEW! Enterprise Collections Demo
+novalang.exe examples/lambda_demo.sf            # 🆕 NEW! Lambda Query Operations Demo
 novalang.exe examples/collections_basic_test.sf # 🆕 NEW! Collections Test Suite
 novalang.exe examples/readme_demo.sf            # Main feature demonstration
 novalang.exe examples/interactive_demo.sf       # Interactive user program
@@ -846,6 +1204,7 @@ dotnet run repl
 # Run the essential examples during development:
 dotnet run run examples/complete_guide.sf         # Comprehensive tutorial
 dotnet run run examples/collections_demo.sf       # 🆕 NEW! Enterprise Collections Demo
+dotnet run run examples/lambda_demo.sf            # 🆕 NEW! Lambda Query Operations Demo
 dotnet run run examples/collections_basic_test.sf # 🆕 NEW! Collections Test Suite
 dotnet run run examples/readme_demo.sf            # Main feature demo
 dotnet run run examples/interactive_demo.sf       # Interactive user program
@@ -973,7 +1332,13 @@ The `examples/` folder contains 8 carefully curated, production-tested NovaLang 
 - Simple constructor testing for immediate validation
 - Perfect for development environment verification
 
-**Total: 20+ KB of curated, working examples** showcasing both core language features and enterprise collection capabilities
+### 🔍 **`lambda_demo.sf`** (NEW!) - **Lambda Query Operations Showcase**
+- Comprehensive demo of all 13 Lambda-style query operations
+- Includes filtering, mapping, sorting, aggregation, and chaining examples  
+- Works with all collection types and regular arrays
+- Enterprise-grade data processing capabilities
+
+**Total: 25+ KB of curated, working examples** showcasing both core language features and enterprise collection capabilities with Lambda query operations
 
 **See also:** 
 - [🔧 M3 Implementation Summary](#-m3-implementation-summary) for technical validation details

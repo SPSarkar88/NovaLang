@@ -932,6 +932,279 @@ public class Environment
             if (args[0] is NumberValue num) return double.IsFinite(num.Value) ? BooleanValue.True : BooleanValue.False;
             return BooleanValue.False; // Non-numbers are not finite
         }));
+
+        // ====================================
+        // Lambda-Style Query Operations for Collections (Basic Version)
+        // ====================================
+        
+        // Lambda.filter - Filter collections based on simple conditions
+        global.Define("Lambda", new ObjectValue(new Dictionary<string, NovaValue>
+        {
+            ["filter"] = new NativeFunctionValue("Lambda.filter", (args, env) =>
+            {
+                if (args.Length != 2)
+                    throw new RuntimeException("Lambda.filter expects (collection, filterType)");
+                
+                var collection = args[0];
+                var filterType = args[1].ToString();
+                
+                var items = ExtractCollectionItems(collection);
+                var results = new List<NovaValue>();
+                
+                // Simple pre-defined filters
+                foreach (var item in items)
+                {
+                    bool include = filterType switch
+                    {
+                        "even" => item is NumberValue n && n.Value % 2 == 0,
+                        "odd" => item is NumberValue n && n.Value % 2 != 0,
+                        "positive" => item is NumberValue n && n.Value > 0,
+                        "negative" => item is NumberValue n && n.Value < 0,
+                        "nonEmpty" => item is StringValue s && !string.IsNullOrEmpty(s.Value),
+                        "truthy" => IsTruthy(item),
+                        _ => true // no filter
+                    };
+                    
+                    if (include)
+                        results.Add(item);
+                }
+                
+                return new ArrayValue(results.ToArray());
+            }),
+            
+            ["map"] = new NativeFunctionValue("Lambda.map", (args, env) =>
+            {
+                if (args.Length != 2)
+                    throw new RuntimeException("Lambda.map expects (collection, operation)");
+                
+                var collection = args[0];
+                var operation = args[1].ToString();
+                
+                var items = ExtractCollectionItems(collection);
+                var results = new List<NovaValue>();
+                
+                // Simple pre-defined operations
+                foreach (var item in items)
+                {
+                    NovaValue result = operation switch
+                    {
+                        "double" => item is NumberValue n ? new NumberValue(n.Value * 2) : item,
+                        "square" => item is NumberValue n ? new NumberValue(n.Value * n.Value) : item,
+                        "abs" => item is NumberValue n ? new NumberValue(Math.Abs(n.Value)) : item,
+                        "upper" => item is StringValue s ? new StringValue(s.Value.ToUpperInvariant()) : item,
+                        "lower" => item is StringValue s ? new StringValue(s.Value.ToLowerInvariant()) : item,
+                        "length" => item is StringValue s ? new NumberValue(s.Value.Length) : 
+                                   item is ArrayValue a ? new NumberValue(a.Length) : item,
+                        _ => item // no operation
+                    };
+                    
+                    results.Add(result);
+                }
+                
+                return new ArrayValue(results.ToArray());
+            }),
+            
+            ["sort"] = new NativeFunctionValue("Lambda.sort", (args, env) =>
+            {
+                if (args.Length == 0)
+                    throw new RuntimeException("Lambda.sort expects (collection) or (collection, direction)");
+                
+                var collection = args[0];
+                var direction = args.Length > 1 ? args[1].ToString() : "asc";
+                
+                var items = ExtractCollectionItems(collection);
+                
+                var sorted = direction == "desc" 
+                    ? items.OrderByDescending(x => x, new NovaValueComparer()).ToArray()
+                    : items.OrderBy(x => x, new NovaValueComparer()).ToArray();
+                
+                return new ArrayValue(sorted);
+            }),
+            
+            ["count"] = new NativeFunctionValue("Lambda.count", (args, env) =>
+            {
+                if (args.Length == 0)
+                    throw new RuntimeException("Lambda.count expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                
+                return new NumberValue(items.Length);
+            }),
+            
+            ["sum"] = new NativeFunctionValue("Lambda.sum", (args, env) =>
+            {
+                if (args.Length == 0)
+                    throw new RuntimeException("Lambda.sum expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                double sum = 0;
+                
+                foreach (var item in items)
+                {
+                    if (item is NumberValue num)
+                        sum += num.Value;
+                }
+                
+                return new NumberValue(sum);
+            }),
+            
+            ["average"] = new NativeFunctionValue("Lambda.average", (args, env) =>
+            {
+                if (args.Length == 0)
+                    throw new RuntimeException("Lambda.average expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                
+                if (items.Length == 0)
+                    return new NumberValue(0);
+                
+                double sum = 0;
+                int count = 0;
+                
+                foreach (var item in items)
+                {
+                    if (item is NumberValue num)
+                    {
+                        sum += num.Value;
+                        count++;
+                    }
+                }
+                
+                return count == 0 ? new NumberValue(0) : new NumberValue(sum / count);
+            }),
+            
+            ["min"] = new NativeFunctionValue("Lambda.min", (args, env) =>
+            {
+                if (args.Length == 0)
+                    throw new RuntimeException("Lambda.min expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                
+                if (items.Length == 0)
+                    return NullValue.Instance;
+                
+                NovaValue min = items[0];
+                for (int i = 1; i < items.Length; i++)
+                {
+                    if (CompareValues(items[i], min) < 0)
+                        min = items[i];
+                }
+                
+                return min;
+            }),
+            
+            ["max"] = new NativeFunctionValue("Lambda.max", (args, env) =>
+            {
+                if (args.Length == 0)
+                    throw new RuntimeException("Lambda.max expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                
+                if (items.Length == 0)
+                    return NullValue.Instance;
+                
+                NovaValue max = items[0];
+                for (int i = 1; i < items.Length; i++)
+                {
+                    if (CompareValues(items[i], max) > 0)
+                        max = items[i];
+                }
+                
+                return max;
+            }),
+            
+            ["first"] = new NativeFunctionValue("Lambda.first", (args, env) =>
+            {
+                if (args.Length == 0)
+                    throw new RuntimeException("Lambda.first expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                
+                return items.Length > 0 ? items[0] : NullValue.Instance;
+            }),
+            
+            ["last"] = new NativeFunctionValue("Lambda.last", (args, env) =>
+            {
+                if (args.Length == 0)
+                    throw new RuntimeException("Lambda.last expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                
+                return items.Length > 0 ? items[items.Length - 1] : NullValue.Instance;
+            }),
+            
+            ["skip"] = new NativeFunctionValue("Lambda.skip", (args, env) =>
+            {
+                if (args.Length != 2)
+                    throw new RuntimeException("Lambda.skip expects (collection, count)");
+                
+                var collection = args[0];
+                var count = args[1] as NumberValue ?? throw new RuntimeException("Skip count must be a number");
+                
+                var items = ExtractCollectionItems(collection);
+                var skipCount = Math.Max(0, (int)count.Value);
+                
+                if (skipCount >= items.Length) 
+                    return new ArrayValue(Array.Empty<NovaValue>());
+                
+                return new ArrayValue(items.Skip(skipCount).ToArray());
+            }),
+            
+            ["take"] = new NativeFunctionValue("Lambda.take", (args, env) =>
+            {
+                if (args.Length != 2)
+                    throw new RuntimeException("Lambda.take expects (collection, count)");
+                
+                var collection = args[0];
+                var count = args[1] as NumberValue ?? throw new RuntimeException("Take count must be a number");
+                
+                var items = ExtractCollectionItems(collection);
+                var takeCount = Math.Max(0, (int)count.Value);
+                
+                if (takeCount == 0) 
+                    return new ArrayValue(Array.Empty<NovaValue>());
+                
+                return new ArrayValue(items.Take(takeCount).ToArray());
+            }),
+            
+            ["reverse"] = new NativeFunctionValue("Lambda.reverse", (args, env) =>
+            {
+                if (args.Length != 1)
+                    throw new RuntimeException("Lambda.reverse expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                
+                return new ArrayValue(items.Reverse().ToArray());
+            }),
+            
+            ["distinct"] = new NativeFunctionValue("Lambda.distinct", (args, env) =>
+            {
+                if (args.Length != 1)
+                    throw new RuntimeException("Lambda.distinct expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                var seen = new HashSet<string>();
+                var results = new List<NovaValue>();
+                
+                foreach (var item in items)
+                {
+                    var key = item.ToString();
+                    if (seen.Add(key))
+                        results.Add(item);
+                }
+                
+                return new ArrayValue(results.ToArray());
+            })
+        }));
         
         // Built-in constants
         global.Define("undefined", UndefinedValue.Instance);
@@ -942,6 +1215,125 @@ public class Environment
         global.Define("NaN", new NumberValue(double.NaN));
         
         return global;
+    }
+
+    /// <summary>
+    /// Helper method to extract items from various collection types for Lambda operations
+    /// </summary>
+    private static NovaValue[] ExtractCollectionItems(NovaValue collection)
+    {
+        return collection switch
+        {
+            ArrayValue arr => arr.Elements.ToArray(),
+            ObjectValue obj when obj.Properties.TryGetValue("items", out var items) && items is ArrayValue arrItems => 
+                arrItems.Elements.ToArray(),
+            ObjectValue obj when obj.Properties.TryGetValue("type", out var type) => 
+                ExtractFromNovaLangCollection(obj, type.ToString()),
+            _ => new[] { collection }
+        };
+    }
+    
+    /// <summary>
+    /// Extract items from NovaLang collection objects (ArrayList, List, Queue, Stack, etc.)
+    /// </summary>
+    private static NovaValue[] ExtractFromNovaLangCollection(ObjectValue collection, string type)
+    {
+        if (!collection.Properties.TryGetValue("items", out var itemsValue) || itemsValue is not ArrayValue items)
+            return Array.Empty<NovaValue>();
+        
+        return type switch
+        {
+            "Queue" or "Stack" => items.Elements.ToArray(),
+            "ArrayList" or "List" => items.Elements.ToArray(),
+            "HashSet" => items.Elements.ToArray(),
+            "Hashtable" or "Dictionary" or "SortedDictionary" or "SortedList" => 
+                ExtractKeyValuePairs(collection),
+            _ => items.Elements.ToArray()
+        };
+    }
+    
+    /// <summary>
+    /// Extract key-value pairs from dictionary-like collections
+    /// </summary>
+    private static NovaValue[] ExtractKeyValuePairs(ObjectValue collection)
+    {
+        if (!collection.Properties.TryGetValue("keys", out var keysValue) || keysValue is not ArrayValue keys ||
+            !collection.Properties.TryGetValue("values", out var valuesValue) || valuesValue is not ArrayValue values)
+            return Array.Empty<NovaValue>();
+        
+        var result = new List<NovaValue>();
+        for (int i = 0; i < Math.Min(keys.Length, values.Length); i++)
+        {
+            var pair = new Dictionary<string, NovaValue>
+            {
+                ["key"] = keys.Elements[i],
+                ["value"] = values.Elements[i]
+            };
+            result.Add(new ObjectValue(pair));
+        }
+        
+        return result.ToArray();
+    }
+    
+    /// <summary>
+    /// Helper method to call a function value with arguments
+    /// </summary>
+    private static NovaValue CallFunction(NovaValue function, NovaValue[] args, Environment env)
+    {
+        if (function is NativeFunctionValue nativeFunc)
+        {
+            return nativeFunc.Call(args, env);
+        }
+        if (function is FunctionValue userFunc)
+        {
+            // Create new environment for function execution
+            var funcEnv = new Environment(userFunc.Closure);
+            
+            // Bind parameters
+            for (int i = 0; i < userFunc.Parameters.Count && i < args.Length; i++)
+            {
+                funcEnv.Define(userFunc.Parameters[i], args[i]);
+            }
+            
+            // This would require access to the evaluator - for now, return undefined
+            // In a full implementation, this would evaluate the function body
+            return UndefinedValue.Instance;
+        }
+        
+        throw new RuntimeException($"Value is not a function: {function}");
+    }
+    
+    /// <summary>
+    /// Helper method to determine if a value is truthy
+    /// </summary>
+    private static bool IsTruthy(NovaValue value)
+    {
+        return value switch
+        {
+            BooleanValue b => b.Value,
+            NumberValue n => n.Value != 0 && !double.IsNaN(n.Value),
+            StringValue s => !string.IsNullOrEmpty(s.Value),
+            NullValue => false,
+            UndefinedValue => false,
+            ArrayValue a => a.Length > 0,
+            ObjectValue o => o.Properties.Count > 0,
+            _ => true
+        };
+    }
+    
+    /// <summary>
+    /// Comparer for NovaValue objects used in Lambda operations
+    /// </summary>
+    private class NovaValueComparer : IComparer<NovaValue>
+    {
+        public int Compare(NovaValue? x, NovaValue? y)
+        {
+            if (x == null && y == null) return 0;
+            if (x == null) return -1;
+            if (y == null) return 1;
+            
+            return CompareValues(x, y);
+        }
     }
 
     /// <summary>

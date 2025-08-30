@@ -1,0 +1,7 @@
+// Very basic test
+print("Testing basic functionality...");
+
+print("Lambda defined:", typeof Lambda);
+
+// Test if we can access Lambda properties
+print("Done!");
