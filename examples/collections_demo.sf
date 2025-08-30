@@ -1,0 +1,279 @@
+// NovaLang Collections Demo - Functional Collection Types
+// Showcasing all 9 collection types implemented as functions (not OOP)
+
+print("🗂️ NovaLang Collections Demo - Functional Approach");
+print("===================================================");
+
+// 1. ARRAYLIST - Dynamic array that can grow or shrink
+print("\n📋 1. ArrayList - Dynamic Array");
+print("-------------------------------");
+
+let arrayList = ArrayList.create(5);
+print("Created ArrayList with capacity 5");
+
+ArrayList.add(arrayList, "Apple");
+ArrayList.add(arrayList, "Banana");
+ArrayList.add(arrayList, "Cherry");
+ArrayList.add(arrayList, 42);
+ArrayList.add(arrayList, true);
+
+print("Added items:", ArrayList.size(arrayList), "total");
+print("Item at index 0:", ArrayList.get(arrayList, 0));
+print("Item at index 3:", ArrayList.get(arrayList, 3));
+
+ArrayList.remove(arrayList, 1); // Remove "Banana"
+print("After removing index 1, size:", ArrayList.size(arrayList));
+print("Item at index 1 now:", ArrayList.get(arrayList, 1));
+
+// 2. HASHTABLE - Key-value pairs based on hash code
+print("\n🗂️ 2. Hashtable - Key-Value Storage");
+print("-----------------------------------");
+
+let hashtable = Hashtable.create();
+print("Created empty hashtable");
+
+Hashtable.put(hashtable, "name", "Alice");
+Hashtable.put(hashtable, "age", 30);
+Hashtable.put(hashtable, "city", "New York");
+Hashtable.put(hashtable, 123, "numeric key");
+
+print("Name:", Hashtable.get(hashtable, "name"));
+print("Age:", Hashtable.get(hashtable, "age"));
+print("Numeric key value:", Hashtable.get(hashtable, 123));
+
+print("Contains 'name':", Hashtable.containsKey(hashtable, "name"));
+print("Contains 'country':", Hashtable.containsKey(hashtable, "country"));
+
+let keys = Hashtable.keys(hashtable);
+print("All keys:", keys);
+
+Hashtable.remove(hashtable, "city");
+print("After removing 'city', contains 'city':", Hashtable.containsKey(hashtable, "city"));
+
+// 3. QUEUE - First-In, First-Out (FIFO)
+print("\n📥 3. Queue - FIFO Collection");
+print("-----------------------------");
+
+let queue = Queue.create();
+print("Created empty queue");
+
+Queue.enqueue(queue, "First");
+Queue.enqueue(queue, "Second");
+Queue.enqueue(queue, "Third");
+Queue.enqueue(queue, 100);
+
+print("Queue size:", Queue.size(queue));
+print("Front item (peek):", Queue.peek(queue));
+
+let first = Queue.dequeue(queue);
+let second = Queue.dequeue(queue);
+print("Dequeued:", first, "and", second);
+print("Queue size after dequeue:", Queue.size(queue));
+print("Front item now:", Queue.peek(queue));
+print("Is queue empty:", Queue.isEmpty(queue));
+
+// 4. STACK - Last-In, First-Out (LIFO)
+print("\n📤 4. Stack - LIFO Collection");
+print("-----------------------------");
+
+let stack = Stack.create();
+print("Created empty stack");
+
+Stack.push(stack, "Bottom");
+Stack.push(stack, "Middle");
+Stack.push(stack, "Top");
+Stack.push(stack, 999);
+
+print("Stack size:", Stack.size(stack));
+print("Top item (peek):", Stack.peek(stack));
+
+let top = Stack.pop(stack);
+let second = Stack.pop(stack);
+print("Popped:", top, "and", second);
+print("Stack size after pop:", Stack.size(stack));
+print("Top item now:", Stack.peek(stack));
+print("Is stack empty:", Stack.isEmpty(stack));
+
+// 5. SORTEDLIST - Key-value pairs sorted by keys, accessible by key and index
+print("\n🔢 5. SortedList - Sorted Key-Value Pairs");
+print("-----------------------------------------");
+
+let sortedList = SortedList.create();
+print("Created empty sorted list");
+
+SortedList.add(sortedList, "zebra", "Last animal");
+SortedList.add(sortedList, "apple", "First fruit");
+SortedList.add(sortedList, "dog", "Loyal pet");
+SortedList.add(sortedList, "cat", "Independent pet");
+
+print("Value for 'apple':", SortedList.get(sortedList, "apple"));
+print("Value for 'zebra':", SortedList.get(sortedList, "zebra"));
+
+print("Value at index 0:", SortedList.getByIndex(sortedList, 0));
+print("Value at index 1:", SortedList.getByIndex(sortedList, 1));
+print("Value at index 2:", SortedList.getByIndex(sortedList, 2));
+
+SortedList.removeByKey(sortedList, "dog");
+print("After removing 'dog', value at index 2:", SortedList.getByIndex(sortedList, 2));
+
+// 6. LIST - Dynamic array similar to ArrayList (generic version)
+print("\n📝 6. List - Generic Dynamic Array");
+print("----------------------------------");
+
+let list = List.create();
+print("Created empty list");
+
+List.add(list, "Item 1");
+List.add(list, "Item 2");
+List.add(list, "Item 3");
+List.add(list, 42);
+
+print("List size:", List.size(list));
+print("Item at index 2:", List.get(list, 2));
+
+List.set(list, 1, "Modified Item 2");
+print("After setting index 1:", List.get(list, 1));
+
+print("Contains 'Item 1':", List.contains(list, "Item 1"));
+print("Contains 'Not here':", List.contains(list, "Not here"));
+
+List.remove(list, 0);
+print("After removing index 0, size:", List.size(list));
+print("New item at index 0:", List.get(list, 0));
+
+// 7. DICTIONARY - Generic version of Hashtable
+print("\n📚 7. Dictionary - Generic Key-Value");
+print("------------------------------------");
+
+let dictionary = Dictionary.create();
+print("Created empty dictionary");
+
+Dictionary.set(dictionary, "firstName", "John");
+Dictionary.set(dictionary, "lastName", "Doe");
+Dictionary.set(dictionary, "age", 35);
+Dictionary.set(dictionary, "isActive", true);
+
+print("First name:", Dictionary.get(dictionary, "firstName"));
+print("Last name:", Dictionary.get(dictionary, "lastName"));
+print("Age:", Dictionary.get(dictionary, "age"));
+
+print("Contains 'firstName':", Dictionary.containsKey(dictionary, "firstName"));
+print("Contains 'middleName':", Dictionary.containsKey(dictionary, "middleName"));
+
+let dictKeys = Dictionary.keys(dictionary);
+let dictValues = Dictionary.values(dictionary);
+print("All keys:", dictKeys);
+print("All values:", dictValues);
+
+Dictionary.remove(dictionary, "isActive");
+print("After removing 'isActive', contains it:", Dictionary.containsKey(dictionary, "isActive"));
+
+// 8. SORTEDDICTIONARY - Key-value pairs sorted by keys
+print("\n🔠 8. SortedDictionary - Sorted Key-Value");
+print("-----------------------------------------");
+
+let sortedDict = SortedDictionary.create();
+print("Created empty sorted dictionary");
+
+SortedDictionary.set(sortedDict, "zoo", "Animals");
+SortedDictionary.set(sortedDict, "apple", "Fruit");
+SortedDictionary.set(sortedDict, "book", "Reading");
+SortedDictionary.set(sortedDict, "car", "Vehicle");
+
+print("Value for 'apple':", SortedDictionary.get(sortedDict, "apple"));
+print("Value for 'zoo':", SortedDictionary.get(sortedDict, "zoo"));
+
+print("Contains 'book':", SortedDictionary.containsKey(sortedDict, "book"));
+print("Contains 'plane':", SortedDictionary.containsKey(sortedDict, "plane"));
+
+SortedDictionary.set(sortedDict, "apple", "Updated fruit"); // Update existing
+print("Updated value for 'apple':", SortedDictionary.get(sortedDict, "apple"));
+
+// 9. HASHSET - Collection of unique elements
+print("\n🎯 9. HashSet - Unique Elements");
+print("-------------------------------");
+
+let hashSet = HashSet.create();
+print("Created empty hash set");
+
+print("Adding 'apple':", HashSet.add(hashSet, "apple"));
+print("Adding 'banana':", HashSet.add(hashSet, "banana"));
+print("Adding 'apple' again:", HashSet.add(hashSet, "apple")); // Should be false
+
+print("HashSet size:", HashSet.size(hashSet));
+print("Contains 'apple':", HashSet.contains(hashSet, "apple"));
+print("Contains 'cherry':", HashSet.contains(hashSet, "cherry"));
+
+HashSet.add(hashSet, "cherry");
+HashSet.add(hashSet, "date");
+HashSet.add(hashSet, 123);
+HashSet.add(hashSet, true);
+
+print("Size after adding more items:", HashSet.size(hashSet));
+
+let hashSetArray = HashSet.toArray(hashSet);
+print("HashSet as array:", hashSetArray);
+
+print("Removing 'banana':", HashSet.remove(hashSet, "banana"));
+print("Size after removal:", HashSet.size(hashSet));
+
+HashSet.clear(hashSet);
+print("Size after clear:", HashSet.size(hashSet));
+
+// SUMMARY
+print("\n✅ Collections Demo Complete!");
+print("==============================");
+print("Successfully demonstrated all 9 NovaLang collection types:");
+print("1. ArrayList - Dynamic array with capacity management");
+print("2. Hashtable - Hash-based key-value storage");
+print("3. Queue - FIFO (First-In, First-Out) collection");
+print("4. Stack - LIFO (Last-In, First-Out) collection");
+print("5. SortedList - Sorted key-value pairs with index access");
+print("6. List - Generic dynamic array");
+print("7. Dictionary - Generic key-value storage");
+print("8. SortedDictionary - Sorted key-value dictionary");
+print("9. HashSet - Collection of unique elements");
+print("");
+print("All collections implemented as functional APIs (no OOP)!");
+print("Each collection maintains its data and provides functional operations.");
+
+// PRACTICAL EXAMPLE - Using multiple collections together
+print("\n🚀 Practical Example: Task Management System");
+print("============================================");
+
+// Use Queue for pending tasks
+let pendingTasks = Queue.create();
+Queue.enqueue(pendingTasks, "Write documentation");
+Queue.enqueue(pendingTasks, "Review code");
+Queue.enqueue(pendingTasks, "Test features");
+
+// Use Stack for completed tasks (most recent first)
+let completedTasks = Stack.create();
+
+// Use Dictionary for task details
+let taskDetails = Dictionary.create();
+Dictionary.set(taskDetails, "Write documentation", { priority: "High", estimated: "2 hours" });
+Dictionary.set(taskDetails, "Review code", { priority: "Medium", estimated: "1 hour" });
+Dictionary.set(taskDetails, "Test features", { priority: "High", estimated: "3 hours" });
+
+// Use HashSet for assigned developers
+let assignedDevs = HashSet.create();
+HashSet.add(assignedDevs, "Alice");
+HashSet.add(assignedDevs, "Bob");
+HashSet.add(assignedDevs, "Alice"); // Won't duplicate
+
+print("Pending tasks:", Queue.size(pendingTasks));
+print("Assigned developers:", HashSet.size(assignedDevs));
+
+// Process a task
+let currentTask = Queue.dequeue(pendingTasks);
+print("Processing task:", currentTask);
+let details = Dictionary.get(taskDetails, currentTask);
+print("Task details:", details);
+
+// Complete the task
+Stack.push(completedTasks, currentTask);
+print("Completed tasks:", Stack.size(completedTasks));
+print("Most recently completed:", Stack.peek(completedTasks));
+
+print("\n🎉 Task management system demo complete!");

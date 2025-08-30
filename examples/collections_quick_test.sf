@@ -1,0 +1,30 @@
+// Quick Collections Availability Test
+print("🧪 NovaLang Collections Availability Test");
+
+// Test that all 9 collection types are available
+print("Testing collection constructors...");
+
+let arrayList = ArrayList.create(5);
+let hashtable = Hashtable.create();
+let queue = Queue.create();
+let stack = Stack.create();
+let sortedList = SortedList.create();
+let list = List.create();
+let dictionary = Dictionary.create();
+let sortedDictionary = SortedDictionary.create();
+let hashSet = HashSet.create();
+
+print("✅ All 9 collection types successfully created:");
+print("   - ArrayList:", arrayList != null);
+print("   - Hashtable:", hashtable != null);
+print("   - Queue:", queue != null);
+print("   - Stack:", stack != null);
+print("   - SortedList:", sortedList != null);
+print("   - List:", list != null);
+print("   - Dictionary:", dictionary != null);
+print("   - SortedDictionary:", sortedDictionary != null);
+print("   - HashSet:", hashSet != null);
+
+print("\n🎉 All NovaLang collections are available and ready for use!");
+print("   Use examples/collections_demo.sf for comprehensive examples");
+print("   Use examples/collections_basic_test.sf for detailed testing");
