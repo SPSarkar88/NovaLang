@@ -129,6 +129,9 @@ class Program
         
         var evaluator = new NovaLang.Evaluator.Evaluator(Runtime.Environment.CreateGlobal());
         
+        // Enable full function parameter support for Lambda operations
+        evaluator.EnableFunctionParameterSupport();
+        
         while (true)
         {
             Console.Write("> ");
@@ -209,6 +212,10 @@ class Program
             var program = parser.Parse();
             
             var evaluator = new NovaLang.Evaluator.Evaluator(NovaLang.Runtime.Environment.CreateGlobal());
+            
+            // Enable full function parameter support for Lambda operations
+            evaluator.EnableFunctionParameterSupport();
+            
             var result = program.Accept(evaluator);
             
             Console.WriteLine($"Script completed. Exit value: {result}");

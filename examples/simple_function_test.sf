@@ -1,0 +1,22 @@
+// Simple function parameter test
+print("=== Simple Function Parameter Test ===");
+
+let numbers = [1, 2, 3, 4, 5];
+print("Numbers:", numbers);
+
+// Test function definition and calling
+let isEven = function(x) { return x % 2 == 0; };
+print("Function defined: isEven");
+
+// Test direct function call
+print("Direct function call: isEven(4) =", isEven(4));
+print("Direct function call: isEven(3) =", isEven(3));
+
+// Test with evaluator-enhanced operations
+print("Testing Lambda.filterWithEvaluator:");
+let result = Lambda.filterWithEvaluator(numbers, isEven);
+print("Result:", result);
+
+print("=== Debug Info ===");
+print("typeof isEven:", typeof isEven);
+print("isEven toString:", isEven.toString());

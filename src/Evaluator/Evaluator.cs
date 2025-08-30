@@ -19,6 +19,14 @@ public class Evaluator : IAstVisitor<NovaValue>
         _environment = environment ?? throw new ArgumentNullException(nameof(environment));
     }
 
+    /// <summary>
+    /// Enables full function parameter support for Lambda operations
+    /// </summary>
+    public void EnableFunctionParameterSupport()
+    {
+        _environment.EnableEvaluatorEnhancedLambda(this);
+    }
+
     // Program visitor
     public NovaValue Visit(AstProgram program)
     {

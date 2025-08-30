@@ -17,6 +17,49 @@ public class Environment
     }
     
     /// <summary>
+    /// Enables evaluator-enhanced Lambda operations for full function parameter support
+    /// </summary>
+    public void EnableEvaluatorEnhancedLambda(NovaLang.Evaluator.Evaluator evaluator)
+    {
+        // Get existing Lambda object or create new one
+        var lambdaObject = _bindings.TryGetValue("Lambda", out var existing) 
+            ? existing as ObjectValue 
+            : new ObjectValue(new Dictionary<string, NovaValue>());
+        
+        if (lambdaObject == null) return;
+        
+        // Add evaluator-enhanced versions of filter and map
+        lambdaObject["filterWithEvaluator"] = new NativeFunctionValue("Lambda.filterWithEvaluator", (args, env) =>
+        {
+            if (args.Length != 2)
+                throw new RuntimeException("Lambda.filterWithEvaluator expects (collection, predicate)");
+            
+            var collection = args[0];
+            object filterParam = args[1] is StringValue str ? (object)str.Value : args[1];
+            
+            var items = ExtractCollectionItems(collection);
+            var results = FilterItems(items, filterParam, env, evaluator);
+            return new ArrayValue(results);
+        });
+        
+        lambdaObject["mapWithEvaluator"] = new NativeFunctionValue("Lambda.mapWithEvaluator", (args, env) =>
+        {
+            if (args.Length != 2)
+                throw new RuntimeException("Lambda.mapWithEvaluator expects (collection, mapper)");
+            
+            var collection = args[0];
+            object mapperParam = args[1] is StringValue str ? (object)str.Value : args[1];
+            
+            var items = ExtractCollectionItems(collection);
+            var results = MapItems(items, mapperParam, env, evaluator);
+            return new ArrayValue(results);
+        });
+        
+        // Update the Lambda object in the environment
+        _bindings["Lambda"] = lambdaObject;
+    }
+    
+    /// <summary>
     /// Defines a new variable in this environment
     /// </summary>
     public void Define(string name, NovaValue value)
@@ -1606,26 +1649,12 @@ public class Environment
     /// <summary>
     /// Helper method to call a function value with arguments
     /// </summary>
-    private static NovaValue CallFunction(NovaValue function, NovaValue[] args, Environment env)
+    private static NovaValue CallFunction(NovaValue function, NovaValue[] args, Environment env, NovaLang.Evaluator.Evaluator? evaluator = null)
     {
-        if (function is NativeFunctionValue nativeFunc)
+        // For any callable function (native or user-defined), use the built-in Call method
+        if (function.IsCallable)
         {
-            return nativeFunc.Call(args, env);
-        }
-        if (function is FunctionValue userFunc)
-        {
-            // Create new environment for function execution
-            var funcEnv = new Environment(userFunc.Closure);
-            
-            // Bind parameters
-            for (int i = 0; i < userFunc.Parameters.Count && i < args.Length; i++)
-            {
-                funcEnv.Define(userFunc.Parameters[i], args[i]);
-            }
-            
-            // This would require access to the evaluator - for now, return undefined
-            // In a full implementation, this would evaluate the function body
-            return UndefinedValue.Instance;
+            return function.Call(args, env);
         }
         
         throw new RuntimeException($"Value is not a function: {function}");
@@ -1635,7 +1664,7 @@ public class Environment
     // Lambda Pipeline Helper Methods with Function Support
     // ====================================
     
-    private static NovaValue[] FilterItems(NovaValue[] items, object filter, Environment? env = null)
+    private static NovaValue[] FilterItems(NovaValue[] items, object filter, Environment? env = null, NovaLang.Evaluator.Evaluator? evaluator = null)
     {
         var results = new List<NovaValue>();
         
@@ -1663,7 +1692,7 @@ public class Environment
                 // Function-based filtering
                 try
                 {
-                    var result = CallFunction(filterFunc, new[] { item }, env);
+                    var result = CallFunction(filterFunc, new[] { item }, env, evaluator);
                     include = IsTruthy(result);
                 }
                 catch
@@ -1678,7 +1707,7 @@ public class Environment
         return results.ToArray();
     }
     
-    private static NovaValue[] MapItems(NovaValue[] items, object mapper, Environment? env = null)
+    private static NovaValue[] MapItems(NovaValue[] items, object mapper, Environment? env = null, NovaLang.Evaluator.Evaluator? evaluator = null)
     {
         var results = new List<NovaValue>();
         
@@ -1706,7 +1735,7 @@ public class Environment
                 // Function-based mapping
                 try
                 {
-                    result = CallFunction(mapperFunc, new[] { item }, env);
+                    result = CallFunction(mapperFunc, new[] { item }, env, evaluator);
                 }
                 catch
                 {

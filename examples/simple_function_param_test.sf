@@ -1,0 +1,17 @@
+// Simple function parameter test
+console.log("Testing function parameters...");
+
+let numbers = [1, 2, 3, 4, 5];
+
+// Simple function that should work
+let testFunc = function(value) {
+    console.log("Inside function, value:", value);
+    return value * 2;
+};
+
+console.log("Calling testFunc directly...");
+console.log("Result:", testFunc(5));
+
+console.log("Using with mapWithEvaluator...");
+let result = Lambda.mapWithEvaluator(numbers, testFunc);
+console.log("Result:", result);
