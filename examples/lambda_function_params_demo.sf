@@ -1,0 +1,115 @@
+// NovaLang Lambda Function Parameters Demo
+// This demonstrates using actual functions instead of magic strings
+// for Lambda operations like filter and map
+
+print("=== NovaLang Lambda Function Parameters Demo ===\n");
+
+// Define a sample collection
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+print("Original numbers:", numbers);
+
+// Define predicate functions for filtering
+let isEven = function(x) { return x % 2 == 0; };
+let isOdd = function(x) { return x % 2 == 1; };
+let greaterThanFive = function(x) { return x > 5; };
+
+// Define mapper functions for transformation
+let double = function(x) { return x * 2; };
+let square = function(x) { return x * x; };
+let toString = function(x) { return "num_" + x; };
+
+print("\n=== Using Function Parameters with Lambda.filter ===");
+
+// Filter using actual function predicates (NEW feature)
+let evenNumbers = Lambda.filter(numbers, isEven);
+print("Even numbers (using isEven function):", evenNumbers);
+
+let oddNumbers = Lambda.filter(numbers, isOdd);
+print("Odd numbers (using isOdd function):", oddNumbers);
+
+let bigNumbers = Lambda.filter(numbers, greaterThanFive);
+print("Numbers > 5 (using greaterThanFive function):", bigNumbers);
+
+print("\n=== Using Function Parameters with Lambda.map ===");
+
+// Map using actual mapper functions (NEW feature)
+let doubledNumbers = Lambda.map(numbers, double);
+print("Doubled numbers (using double function):", doubledNumbers);
+
+let squaredNumbers = Lambda.map(numbers, square);
+print("Squared numbers (using square function):", squaredNumbers);
+
+let stringNumbers = Lambda.map(numbers, toString);
+print("String numbers (using toString function):", stringNumbers);
+
+print("\n=== Backward Compatibility - Using Magic Strings ===");
+
+// Still supporting magic strings for backward compatibility
+let evenWithString = Lambda.filter(numbers, "even");
+print("Even numbers (using 'even' magic string):", evenWithString);
+
+let doubledWithString = Lambda.map(numbers, "double");
+print("Doubled numbers (using 'double' magic string):", doubledWithString);
+
+print("\n=== Complex Pipeline with Function Parameters ===");
+
+// Create a complex pipeline using both function parameters and method chaining
+let result = Lambda.pipeline(numbers)
+    .filter(isEven)              // Use function parameter
+    .map(square)                 // Use function parameter
+    .filter(function(x) { return x > 10; })  // Inline function
+    .sort("asc")
+    .execute();
+
+print("Pipeline result (even → square → >10 → sort):", result);
+
+print("\n=== Function Chaining Example ===");
+
+// Chain multiple operations with mixed parameter types
+let chainResult = Lambda.chain([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+    .filter(function(x) { return x % 3 == 0; })  // Divisible by 3
+    .map(function(x) { return x + 10; })         // Add 10
+    .sort("desc")                                // Magic string still works
+    .take(3)
+    .execute();
+
+print("Chain result (div by 3 → +10 → desc sort → take 3):", chainResult);
+
+print("\n=== Advanced Function Examples ===");
+
+// More complex function examples
+let data = [
+    {name: "Alice", age: 25, score: 85},
+    {name: "Bob", age: 30, score: 92},
+    {name: "Charlie", age: 22, score: 78},
+    {name: "Diana", age: 28, score: 95}
+];
+
+print("Original data:", data);
+
+// Filter adults (age >= 25)
+let adults = Lambda.filter(data, function(person) { 
+    return person.age >= 25; 
+});
+print("Adults (age >= 25):", adults);
+
+// Map to scores only
+let scores = Lambda.map(data, function(person) { 
+    return person.score; 
+});
+print("Scores only:", scores);
+
+// Complex pipeline with object data
+let topPerformers = Lambda.pipeline(data)
+    .filter(function(p) { return p.score >= 90; })  // High score
+    .map(function(p) { return p.name; })            // Extract names
+    .sort("asc")                                    // Sort names
+    .execute();
+
+print("Top performers (score >= 90):", topPerformers);
+
+print("\n=== Demo Complete! ===");
+print("✅ Function parameters work with Lambda.filter and Lambda.map");
+print("✅ Backward compatibility maintained with magic strings");
+print("✅ Pipeline and chaining support function parameters");
+print("✅ Complex data processing with custom predicates enabled");

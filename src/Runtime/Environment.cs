@@ -955,16 +955,17 @@ public class Environment
                         throw new RuntimeException($"Operation {i} must be an array [operation] or [operation, param]");
                     
                     var opName = operation[0].ToString();
-                    var opParam = operation.Length > 1 ? operation[1].ToString() : "";
+                    object opParam = operation.Length > 1 ? 
+                        (operation[1] is StringValue str ? str.Value : operation[1]) : "";
                     
-                    // Apply operation using existing Lambda methods
+                    // Apply operation using enhanced Lambda methods with function support
                     currentData = opName switch
                     {
-                        "filter" => FilterItems(currentData, opParam),
-                        "map" => MapItems(currentData, opParam),
-                        "sort" => SortItems(currentData, opParam),
-                        "take" => TakeItems(currentData, opParam),
-                        "skip" => SkipItems(currentData, opParam),
+                        "filter" => FilterItems(currentData, opParam, env),
+                        "map" => MapItems(currentData, opParam, env),
+                        "sort" => SortItems(currentData, opParam.ToString()!),
+                        "take" => TakeItems(currentData, opParam.ToString()!),
+                        "skip" => SkipItems(currentData, opParam.ToString()!),
                         "distinct" => DistinctItems(currentData),
                         "reverse" => ReverseItems(currentData),
                         _ => throw new RuntimeException($"Unknown operation: {opName}")
@@ -1312,9 +1313,9 @@ public class Environment
                     throw new RuntimeException("Lambda.filter expects (collection, filterType)");
                 
                 var collection = args[0];
-                var filterType = args[1].ToString();
+                object filterParam = args[1] is StringValue str ? (object)str.Value : args[1];
                 var items = ExtractCollectionItems(collection);
-                var results = FilterItems(items, filterType);
+                var results = FilterItems(items, filterParam, env);
                 return new ArrayValue(results);
             }),
             
@@ -1324,30 +1325,11 @@ public class Environment
                     throw new RuntimeException("Lambda.map expects (collection, operation)");
                 
                 var collection = args[0];
-                var operation = args[1].ToString();
+                object mapperParam = args[1] is StringValue str ? (object)str.Value : args[1];
                 
                 var items = ExtractCollectionItems(collection);
-                var results = new List<NovaValue>();
-                
-                // Simple pre-defined operations
-                foreach (var item in items)
-                {
-                    NovaValue result = operation switch
-                    {
-                        "double" => item is NumberValue n ? new NumberValue(n.Value * 2) : item,
-                        "square" => item is NumberValue n ? new NumberValue(n.Value * n.Value) : item,
-                        "abs" => item is NumberValue n ? new NumberValue(Math.Abs(n.Value)) : item,
-                        "upper" => item is StringValue s ? new StringValue(s.Value.ToUpperInvariant()) : item,
-                        "lower" => item is StringValue s ? new StringValue(s.Value.ToLowerInvariant()) : item,
-                        "length" => item is StringValue s ? new NumberValue(s.Value.Length) : 
-                                   item is ArrayValue a ? new NumberValue(a.Length) : item,
-                        _ => item // no operation
-                    };
-                    
-                    results.Add(result);
-                }
-                
-                return new ArrayValue(results.ToArray());
+                var results = MapItems(items, mapperParam, env);
+                return new ArrayValue(results);
             }),
             
             ["sort"] = new NativeFunctionValue("Lambda.sort", (args, env) =>
@@ -1650,26 +1632,45 @@ public class Environment
     }
     
     // ====================================
-    // Lambda Pipeline Helper Methods
+    // Lambda Pipeline Helper Methods with Function Support
     // ====================================
     
-    private static NovaValue[] FilterItems(NovaValue[] items, string filterType)
+    private static NovaValue[] FilterItems(NovaValue[] items, object filter, Environment? env = null)
     {
         var results = new List<NovaValue>();
         
         foreach (var item in items)
         {
-            bool include = filterType switch
+            bool include = false;
+            
+            if (filter is string filterType)
             {
-                "even" => item is NumberValue n && n.Value % 2 == 0,
-                "odd" => item is NumberValue n && n.Value % 2 != 0,
-                "positive" => item is NumberValue n && n.Value > 0,
-                "negative" => item is NumberValue n && n.Value < 0,
-                "high" => item is NumberValue n && n.Value > 85, // for scores
-                "nonEmpty" => item is StringValue s && !string.IsNullOrEmpty(s.Value),
-                "truthy" => IsTruthy(item),
-                _ => true
-            };
+                // Backward compatibility: magic string filters
+                include = filterType switch
+                {
+                    "even" => item is NumberValue n && n.Value % 2 == 0,
+                    "odd" => item is NumberValue n && n.Value % 2 != 0,
+                    "positive" => item is NumberValue n && n.Value > 0,
+                    "negative" => item is NumberValue n && n.Value < 0,
+                    "high" => item is NumberValue n && n.Value > 85, // for scores
+                    "nonEmpty" => item is StringValue s && !string.IsNullOrEmpty(s.Value),
+                    "truthy" => IsTruthy(item),
+                    _ => true
+                };
+            }
+            else if (filter is NovaValue filterFunc && env != null)
+            {
+                // Function-based filtering
+                try
+                {
+                    var result = CallFunction(filterFunc, new[] { item }, env);
+                    include = IsTruthy(result);
+                }
+                catch
+                {
+                    include = false; // If function call fails, exclude the item
+                }
+            }
             
             if (include) results.Add(item);
         }
@@ -1677,23 +1678,42 @@ public class Environment
         return results.ToArray();
     }
     
-    private static NovaValue[] MapItems(NovaValue[] items, string operation)
+    private static NovaValue[] MapItems(NovaValue[] items, object mapper, Environment? env = null)
     {
         var results = new List<NovaValue>();
         
         foreach (var item in items)
         {
-            NovaValue result = operation switch
+            NovaValue result = item; // Default: return original item
+            
+            if (mapper is string operation)
             {
-                "double" => item is NumberValue n ? new NumberValue(n.Value * 2) : item,
-                "square" => item is NumberValue n ? new NumberValue(n.Value * n.Value) : item,
-                "abs" => item is NumberValue n ? new NumberValue(Math.Abs(n.Value)) : item,
-                "upper" => item is StringValue s ? new StringValue(s.Value.ToUpperInvariant()) : item,
-                "lower" => item is StringValue s ? new StringValue(s.Value.ToLowerInvariant()) : item,
-                "length" => item is StringValue s ? new NumberValue(s.Value.Length) : 
-                           item is ArrayValue a ? new NumberValue(a.Length) : item,
-                _ => item
-            };
+                // Backward compatibility: magic string operations
+                result = operation switch
+                {
+                    "double" => item is NumberValue n ? new NumberValue(n.Value * 2) : item,
+                    "square" => item is NumberValue n ? new NumberValue(n.Value * n.Value) : item,
+                    "abs" => item is NumberValue n ? new NumberValue(Math.Abs(n.Value)) : item,
+                    "upper" => item is StringValue s ? new StringValue(s.Value.ToUpperInvariant()) : item,
+                    "lower" => item is StringValue s ? new StringValue(s.Value.ToLowerInvariant()) : item,
+                    "length" => item is StringValue s ? new NumberValue(s.Value.Length) : 
+                               item is ArrayValue a ? new NumberValue(a.Length) : item,
+                    _ => item
+                };
+            }
+            else if (mapper is NovaValue mapperFunc && env != null)
+            {
+                // Function-based mapping
+                try
+                {
+                    result = CallFunction(mapperFunc, new[] { item }, env);
+                }
+                catch
+                {
+                    result = item; // If function call fails, return original item
+                }
+            }
+            
             results.Add(result);
         }
         
@@ -1764,24 +1784,9 @@ public class Environment
     }
     
     /// <summary>
-    /// Comparer for NovaValue objects used in Lambda operations
-    /// </summary>
-    private class NovaValueComparer : IComparer<NovaValue>
-    {
-        public int Compare(NovaValue? x, NovaValue? y)
-        {
-            if (x == null && y == null) return 0;
-            if (x == null) return -1;
-            if (y == null) return 1;
-            
-            return CompareValues(x, y);
-        }
-    }
-
-    /// <summary>
     /// Helper method to compare two NovaValues for sorting
     /// </summary>
-    private static int CompareValues(NovaValue left, NovaValue right)
+    public static int CompareValues(NovaValue left, NovaValue right)
     {
         return (left, right) switch
         {
@@ -1790,5 +1795,20 @@ public class Environment
             (BooleanValue l, BooleanValue r) => l.Value.CompareTo(r.Value),
             _ => string.Compare(left.ToString(), right.ToString(), StringComparison.Ordinal)
         };
+    }
+}
+
+/// <summary>
+/// Comparer for NovaValue objects used in Lambda operations
+/// </summary>
+public class NovaValueComparer : IComparer<NovaValue>
+{
+    public int Compare(NovaValue? x, NovaValue? y)
+    {
+        if (x == null && y == null) return 0;
+        if (x == null) return -1;
+        if (y == null) return 1;
+        
+        return Environment.CompareValues(x, y);
     }
 }
