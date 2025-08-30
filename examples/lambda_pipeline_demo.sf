@@ -1,0 +1,143 @@
+// NovaLang Lambda Pipeline Demo
+// Functional data processing with pipeline operations
+console.log("=".repeat(60));
+console.log("🚀 NovaLang Lambda Pipeline Demo");
+console.log("=".repeat(60));
+
+// Sample data sets
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let mixed = [1, 2, 2, 3, 4, 4, 5, 6];
+let scores = [85, 92, 78, 96, 88, 75, 91, 83, 89, 94];
+
+// 1. Basic Pipeline Operations
+console.log("\n1. Basic Pipeline Operations");
+console.log("Original numbers:", numbers);
+
+// Pipeline 1: Filter even numbers → double them → take first 3
+let pipeline1 = Lambda.pipeline(numbers, 
+    ["filter", "even"], 
+    ["map", "double"], 
+    ["take", "3"]
+);
+console.log("Even → Double → Take 3:", pipeline1);
+
+// Pipeline 2: Filter odds → square them → sort desc
+let pipeline2 = Lambda.pipeline(numbers, 
+    ["filter", "odd"], 
+    ["map", "square"], 
+    ["sort", "desc"]
+);
+console.log("Odd → Square → Sort Desc:", pipeline2);
+
+// 2. Complex Data Processing
+console.log("\n2. Complex Data Processing");
+
+// Pipeline 3: Remove duplicates → filter positive → sort → take top 5
+let pipeline3 = Lambda.pipeline(mixed, 
+    ["distinct"], 
+    ["filter", "positive"], 
+    ["sort", "asc"],
+    ["take", "5"]
+);
+console.log("Mixed data processed:", pipeline3);
+
+// 3. Score Analysis Pipeline
+console.log("\n3. Score Analysis Pipeline");
+console.log("Original scores:", scores);
+
+// Pipeline 4: High scores (>85) → sort desc → take top 3
+let topScores = Lambda.pipeline(scores,
+    ["filter", "high"], // We'll add this filter type
+    ["sort", "desc"],
+    ["take", "3"]
+);
+console.log("Top 3 high scores:", topScores);
+
+// Pipeline 5: All scores → sort asc → skip bottom 3 → take rest
+let middleScores = Lambda.pipeline(scores,
+    ["sort", "asc"],
+    ["skip", "3"],
+    ["take", "4"]
+);
+console.log("Middle range scores:", middleScores);
+
+// 4. Chain Operations (Alternative Syntax)
+console.log("\n4. Chain Operations (Functional Style)");
+
+// Create a chain object and process it
+let chain = Lambda.chain(numbers);
+console.log("Original chain data:", Lambda.chain(numbers)["toArray"](chain));
+
+let step1 = chain["filter"](chain, "even");
+console.log("After filter even:", step1["toArray"](step1));
+
+let step2 = step1["map"](step1, "double");
+console.log("After map double:", step2["toArray"](step2));
+
+let step3 = step2["take"](step2, 3);
+console.log("After take 3:", step3["toArray"](step3));
+
+let finalResult = step3["sum"](step3);
+console.log("Final sum:", finalResult);
+
+// 5. Statistical Operations
+console.log("\n5. Statistical Operations");
+
+let statsChain = Lambda.chain(scores);
+console.log("Count:", statsChain["count"](statsChain));
+console.log("Sum:", statsChain["sum"](statsChain));
+console.log("Average:", statsChain["average"](statsChain));
+console.log("Min:", statsChain["min"](statsChain));
+console.log("Max:", statsChain["max"](statsChain));
+console.log("First:", statsChain["first"](statsChain));
+console.log("Last:", statsChain["last"](statsChain));
+
+// 6. String Processing
+console.log("\n6. String Processing");
+let words = ["hello", "world", "nova", "lang", "functional"];
+
+let stringPipeline = Lambda.pipeline(words,
+    ["map", "upper"],
+    ["filter", "nonEmpty"],
+    ["sort", "asc"]
+);
+console.log("String processing result:", stringPipeline);
+
+// 7. Data Transformation Chains
+console.log("\n7. Data Transformation Chains");
+
+// Process large dataset efficiently
+let largeDataset = [5, -3, 8, -1, 12, 0, -7, 15, 3, -2, 9, -4];
+
+let processedData = Lambda.pipeline(largeDataset,
+    ["filter", "positive"],  // Only positive numbers
+    ["map", "square"],       // Square them
+    ["distinct"],            // Remove duplicates
+    ["sort", "desc"],        // Sort descending
+    ["take", "5"]            // Take top 5
+);
+
+console.log("Large dataset processed:", processedData);
+
+// 8. Performance and Efficiency
+console.log("\n8. Performance and Efficiency");
+
+// Pipeline processes data in one pass, more efficient than separate operations
+let efficient = Lambda.pipeline(numbers,
+    ["filter", "even"],
+    ["map", "double"],
+    ["distinct"],
+    ["sort", "desc"]
+);
+console.log("Efficient processing:", efficient);
+
+// Alternative: separate operations (less efficient)
+let step1_separate = Lambda.filter(numbers, "even");
+let step2_separate = Lambda.map(step1_separate, "double");
+let step3_separate = Lambda.distinct(step2_separate);
+let step4_separate = Lambda.sort(step3_separate, "desc");
+console.log("Separate operations (same result):", step4_separate);
+
+console.log("\n" + "=".repeat(60));
+console.log("✅ Lambda Pipeline Demo Complete!");
+console.log("=".repeat(60));

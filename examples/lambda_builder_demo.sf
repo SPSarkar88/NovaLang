@@ -1,0 +1,273 @@
+// NovaLang Lambda Builder Pattern Demo - Method Chaining for Functional Data Processing
+// =====================================================================================
+// This example demonstrates the new chainable Lambda.from() builder pattern
+
+console.log("=== NovaLang Lambda Builder Pattern Demo ===");
+console.log("");
+
+// 1. Basic Builder Pattern Usage
+console.log("1. Basic Builder Pattern:");
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+console.log("Original numbers:", numbers);
+
+// Create a chainable Lambda builder
+let builder = Lambda.from(numbers);
+console.log("Created Lambda builder from array");
+
+// Simple chaining - filter then map
+let result1 = Lambda.from(numbers)
+    .filter("even")
+    .map("double")
+    .toArray();
+console.log("Even numbers doubled:", result1);
+
+console.log("");
+
+// 2. Complex Method Chaining Pipeline
+console.log("2. Complex Method Chaining Pipeline:");
+let rawData = [-5, -2, 0, 1, 3, 4, 6, 8, 10, 12, 15, 3, 8, 4];
+console.log("Raw data:", rawData);
+
+// Multi-step processing pipeline using method chaining
+let processedData = Lambda.from(rawData)
+    .filter("positive")      // Filter positive numbers
+    .distinct()              // Remove duplicates
+    .map("square")           // Square each number
+    .sort("desc")            // Sort descending
+    .take(5)                 // Take top 5
+    .toArray();              // Convert to final array
+
+console.log("Processed pipeline result:", processedData);
+
+console.log("");
+
+// 3. String Processing with Chaining
+console.log("3. String Processing with Method Chaining:");
+let sentences = ["Hello World", "NovaLang Rocks", "", "Functional Programming", "Method Chaining", ""];
+console.log("Original sentences:", sentences);
+
+let processedStrings = Lambda.from(sentences)
+    .filter("nonEmpty")      // Remove empty strings
+    .map("lower")            // Convert to lowercase
+    .map("length")           // Get string lengths
+    .sort("asc")             // Sort by length
+    .toArray();
+
+console.log("Processed strings (lengths, sorted):", processedStrings);
+
+console.log("");
+
+// 4. Aggregation Operations with Chaining
+console.log("4. Aggregation Operations:");
+let scores = [85, 92, 78, 96, 89, 94, 73, 88, 91, 87];
+console.log("Original scores:", scores);
+
+// Get statistics using chained operations
+let highScores = Lambda.from(scores)
+    .filter("positive")
+    .sort("desc")
+    .take(3)
+    .toArray();
+
+let averageScore = Lambda.from(scores).average();
+let maxScore = Lambda.from(scores).max();
+let minScore = Lambda.from(scores).min();
+let totalCount = Lambda.from(scores).count();
+
+console.log("Top 3 scores:", highScores);
+console.log("Average score:", averageScore);
+console.log("Max score:", maxScore);
+console.log("Min score:", minScore);
+console.log("Total count:", totalCount);
+
+console.log("");
+
+// 5. Real-World Data Processing Example
+console.log("5. Real-World Example - Sales Data Processing:");
+
+// Simulate sales data processing
+let salesData = [120, 150, 89, 200, 175, 95, 220, 110, 185, 160];
+console.log("Monthly sales data:", salesData);
+
+// Business logic: Find high-performing months (>100), get their growth potential
+let highPerformers = Lambda.from(salesData)
+    .filter("positive")         // Ensure positive sales
+    .distinct()                 // Remove any duplicate values
+    .sort("desc")               // Sort by performance
+    .take(6)                    // Take top 6 performers
+    .map("double")              // Calculate growth potential (2x current)
+    .toArray();
+
+console.log("Top performers with growth potential:", highPerformers);
+
+// Calculate key metrics
+let totalSales = Lambda.from(salesData).sum();
+let averageSales = Lambda.from(salesData).average();
+let bestMonth = Lambda.from(salesData).max();
+
+console.log("Total sales:", totalSales);
+console.log("Average monthly sales:", averageSales);
+console.log("Best month sales:", bestMonth);
+
+console.log("");
+
+// 6. Collection Integration with Builder Pattern
+console.log("6. Collections + Lambda Builder Integration:");
+
+// Create collections and process with Lambda builder
+let arrayList = ArrayList.create();
+ArrayList.add(arrayList, 10);
+ArrayList.add(arrayList, 20);
+ArrayList.add(arrayList, 30);
+ArrayList.add(arrayList, 40);
+ArrayList.add(arrayList, 50);
+
+let processedCollection = Lambda.from(arrayList)
+    .map("square")
+    .filter("positive")
+    .sort("desc")
+    .take(3)
+    .toArray();
+
+console.log("ArrayList processed:", processedCollection);
+
+// Dictionary values processing
+let dict = Dictionary.create();
+Dictionary.set(dict, "q1", 100);
+Dictionary.set(dict, "q2", 150);
+Dictionary.set(dict, "q3", 200);
+Dictionary.set(dict, "q4", 175);
+
+let quarterlyAnalysis = Lambda.from(Dictionary.values(dict))
+    .sort("desc")
+    .map("double")
+    .take(2)
+    .sum();
+
+console.log("Top 2 quarters growth potential:", quarterlyAnalysis);
+
+console.log("");
+
+// 7. Advanced Chaining Patterns
+console.log("7. Advanced Chaining Patterns:");
+
+let complexData = [1, -2, 3, -4, 5, 6, -7, 8, 9, -10, 11, 12];
+console.log("Complex mixed data:", complexData);
+
+// Pattern 1: Multi-step filtering and transformation
+let pattern1 = Lambda.from(complexData)
+    .map("abs")              // Make all positive
+    .filter("even")          // Keep even numbers
+    .distinct()              // Remove duplicates
+    .sort("asc")             // Sort ascending
+    .skip(1)                 // Skip first element
+    .take(4)                 // Take next 4
+    .map("square")           // Square them
+    .reverse()               // Reverse order
+    .toArray();
+
+console.log("Pattern 1 result:", pattern1);
+
+// Pattern 2: Statistical analysis chain
+let pattern2Stats = {
+    positiveCount: Lambda.from(complexData).filter("positive").count(),
+    negativeCount: Lambda.from(complexData).filter("negative").count(),
+    maxAbs: Lambda.from(complexData).map("abs").max(),
+    avgPositive: Lambda.from(complexData).filter("positive").average()
+};
+
+console.log("Pattern 2 statistics:", pattern2Stats);
+
+console.log("");
+
+// 8. Builder Pattern vs Static Methods Comparison
+console.log("8. Builder vs Static Methods Comparison:");
+
+let testData = [5, 2, 8, 1, 9, 3];
+console.log("Test data:", testData);
+
+// Old static method approach (still works for compatibility)
+let staticResult = Lambda.take(
+    Lambda.sort(
+        Lambda.map(
+            Lambda.filter(testData, "odd"), 
+            "square"
+        ), 
+        "desc"
+    ), 
+    2
+);
+console.log("Static method result:", staticResult);
+
+// New builder pattern approach (more readable)
+let builderResult = Lambda.from(testData)
+    .filter("odd")
+    .map("square")
+    .sort("desc")
+    .take(2)
+    .toArray();
+
+console.log("Builder pattern result:", builderResult);
+console.log("Results are equivalent:", JSON.stringify(staticResult) === JSON.stringify(builderResult));
+
+console.log("");
+
+// 9. Functional Programming Principles Demonstration
+console.log("9. Functional Programming Principles:");
+
+// Immutability - original data unchanged
+let originalData = [1, 2, 3, 4, 5];
+console.log("Original data before processing:", originalData);
+
+let transformedData = Lambda.from(originalData)
+    .map("double")
+    .map("square")
+    .toArray();
+
+console.log("Transformed data:", transformedData);
+console.log("Original data after processing (unchanged):", originalData);
+
+// Pure functions - same input, same output
+let input = [3, 1, 4, 1, 5];
+let result1_pure = Lambda.from(input).sort("asc").toArray();
+let result2_pure = Lambda.from(input).sort("asc").toArray();
+
+console.log("Pure function test - Result 1:", result1_pure);
+console.log("Pure function test - Result 2:", result2_pure);
+console.log("Results are identical (pure):", JSON.stringify(result1_pure) === JSON.stringify(result2_pure));
+
+console.log("");
+
+// 10. Performance and Memory Efficient Chaining
+console.log("10. Performance Optimized Chaining:");
+
+// Large data processing simulation
+let largeDataset = [];
+for (let i = 1; i <= 100; i++) {
+    largeDataset.push(i);
+}
+
+console.log("Processing large dataset (1-100)...");
+
+let optimizedResult = Lambda.from(largeDataset)
+    .filter("even")          // Keep only evens: 50 items
+    .skip(10)                // Skip first 10: 40 items  
+    .take(20)                // Take 20: 20 items
+    .map("square")           // Square each: 20 items
+    .sort("desc")            // Sort descending: 20 items
+    .take(5)                 // Final top 5
+    .toArray();
+
+console.log("Optimized large data result (top 5):", optimizedResult);
+
+let summary = Lambda.from(optimizedResult);
+console.log("Final summary - Count:", summary.count());
+console.log("Final summary - Sum:", summary.sum());
+console.log("Final summary - Average:", summary.average());
+
+console.log("");
+console.log("=== Lambda Builder Pattern Demo Complete ===");
+console.log("✅ Method chaining provides clean, readable functional programming");
+console.log("✅ Builder pattern maintains immutability and pure function principles");
+console.log("✅ Backward compatible with static Lambda methods");
+console.log("✅ Integrates seamlessly with all NovaLang collections");

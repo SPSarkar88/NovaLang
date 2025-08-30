@@ -1,0 +1,89 @@
+// NovaLang Lambda Pipeline Demo - Simple Version
+// Functional data processing with pipeline operations
+console.log("============================================================");
+console.log("NovaLang Lambda Pipeline Demo");
+console.log("============================================================");
+
+// Sample data sets
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let mixed = [1, 2, 2, 3, 4, 4, 5, 6];
+
+// 1. Basic Pipeline Operations
+console.log("");
+console.log("1. Basic Pipeline Operations");
+console.log("Original numbers:", numbers);
+
+// Pipeline 1: Filter even numbers → double them → take first 3
+let pipeline1 = Lambda.pipeline(numbers, 
+    ["filter", "even"], 
+    ["map", "double"], 
+    ["take", "3"]
+);
+console.log("Even → Double → Take 3:", pipeline1);
+
+// Pipeline 2: Filter odds → square them → sort desc
+let pipeline2 = Lambda.pipeline(numbers, 
+    ["filter", "odd"], 
+    ["map", "square"], 
+    ["sort", "desc"]
+);
+console.log("Odd → Square → Sort Desc:", pipeline2);
+
+// 2. Complex Data Processing
+console.log("");
+console.log("2. Complex Data Processing");
+
+// Pipeline 3: Remove duplicates → filter positive → sort → take top 5
+let pipeline3 = Lambda.pipeline(mixed, 
+    ["distinct"], 
+    ["filter", "positive"], 
+    ["sort", "asc"],
+    ["take", "5"]
+);
+console.log("Mixed data processed:", pipeline3);
+
+// 3. Chain Operations (Functional Style)
+console.log("");
+console.log("3. Chain Operations (Functional Style)");
+
+// Create a chain object and process it
+let chain = Lambda.chain(numbers);
+
+// Step-by-step processing
+let step1 = chain["filter"](chain, "even");
+console.log("After filter even:", step1["toArray"](step1));
+
+let step2 = step1["map"](step1, "double");
+console.log("After map double:", step2["toArray"](step2));
+
+let step3 = step2["take"](step2, 3);
+console.log("After take 3:", step3["toArray"](step3));
+
+let finalResult = step3["sum"](step3);
+console.log("Final sum:", finalResult);
+
+// 4. Statistical Operations
+console.log("");
+console.log("4. Statistical Operations");
+let scores = [85, 92, 78, 96, 88];
+
+let statsChain = Lambda.chain(scores);
+console.log("Count:", statsChain["count"](statsChain));
+console.log("Sum:", statsChain["sum"](statsChain));
+console.log("Average:", statsChain["average"](statsChain));
+console.log("Min:", statsChain["min"](statsChain));
+console.log("Max:", statsChain["max"](statsChain));
+console.log("First:", statsChain["first"](statsChain));
+console.log("Last:", statsChain["last"](statsChain));
+
+// 5. Backward Compatibility - Using Static Methods
+console.log("");
+console.log("5. Backward Compatibility - Static Methods");
+let evenNumbers = Lambda.filter(numbers, "even");
+let doubledEvens = Lambda.map(evenNumbers, "double");
+console.log("Static methods result:", doubledEvens);
+
+console.log("");
+console.log("============================================================");
+console.log("Lambda Pipeline Demo Complete!");
+console.log("============================================================");

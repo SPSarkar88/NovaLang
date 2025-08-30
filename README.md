@@ -14,7 +14,7 @@ A modern, functional programming language built in **C#/.NET 9.0** with JavaScri
 
 **🎉 NEW in v1.0.0-alpha: Enterprise-Grade Collections + Lambda Operations**
 
-NovaLang now includes **9 comprehensive collection types** + **13 Lambda query operations** implemented as functional APIs:
+NovaLang now includes **9 comprehensive collection types** + **15 Lambda operations** with **Pipeline Processing** and **Method Chaining** implemented as functional APIs:
 
 **Collections:**
 - **ArrayList, Hashtable, Queue, Stack, SortedList, List, Dictionary, SortedDictionary, HashSet**
@@ -47,7 +47,7 @@ let topItems = Lambda.take(Lambda.sort(doubled, "desc"), 3);
 print("Enterprise data processing ready!");
 ```
 
-**📚 Try it now:** `novalang.exe examples/lambda_demo.sf` *(Lambda operations)* | `novalang.exe examples/collections_demo.sf` *(Collections)*
+**📚 Try it now:** `novalang.exe examples/lambda_simple_demo.sf` *(Pipeline operations)* | `novalang.exe examples/collections_demo.sf` *(Collections)*
 
 ---
 
@@ -61,8 +61,33 @@ print("Enterprise data processing ready!");
 - [⚡ Quick Start](#-quick-start)
 - [📖 Complete Language Reference](#-complete-language-reference)
   - [Collection Types - Functional Approach](#collection-types---functional-approach-)
-  - [Lambda Query Operations - Functional Data Processing](#lambda-query-operations---functional-data-processing-)
+  - [Lambda Operations - Functional Data Processing with Pipeline Support](#lambda-operations---functional-data-processing-with-pipeline-support-)
 - [📚 Essential Examples Collection](#-essential-examples-collection)
+
+## 🆕 **Latest Features in v1.0.0-alpha**
+
+### 🚀 **Lambda Pipeline Operations** - Advanced Functional Programming
+NovaLang now supports **method chaining** and **pipeline processing** for elegant data transformations:
+
+```javascript
+// Pipeline approach - Execute multiple operations in one efficient pass
+let result = Lambda.pipeline(numbers, 
+    ["filter", "even"], 
+    ["map", "double"], 
+    ["sort", "desc"],
+    ["take", "3"]
+); // Result: [20, 16, 12]
+
+// Chain approach - Step-by-step fluent API with intermediate results
+let chain = Lambda.chain(data);
+let step1 = chain["filter"](chain, "even");
+let step2 = step1["map"](step1, "double");  
+let finalSum = step2["sum"](step2); // Get sum directly
+```
+
+**Benefits:** Single-pass processing, readable syntax, backward compatible with all existing Lambda methods.
+
+---
 
 ## 🔧 M3 Implementation Summary
 
@@ -210,7 +235,7 @@ let age = input("Age: ");                 // Interactive programs
 - ✅ **Values**: Full runtime type system (Number, String, Boolean, Array, Object, Function)
 - ✅ **Control Flow**: if/else, loops (for/while), function calls, returns, switch/case
 - ✅ **Functions**: User-defined functions with closures and first-class function support
-- ✅ **Built-ins**: Console.log, Math operations, Array/Object utilities, **9 Collection Types**, **13 Lambda Query Operations**
+- ✅ **Built-ins**: Console.log, Math operations, Array/Object utilities, **9 Collection Types**, **15 Lambda Operations with Pipeline Processing**
 - ✅ **M3 Advanced Features**: [Spread syntax, destructuring, template literals](#-m3-advanced-features---production-validated) with interpolation
 - ✅ **Error Handling**: try/catch/throw with proper exception handling
 - ✅ **REPL**: Interactive shell for development and testing
@@ -801,11 +826,63 @@ print("Tasks remaining:", Queue.size(pendingTasks));
 
 ---
 
-### Lambda Query Operations - Functional Data Processing ✨
+### Lambda Operations - Functional Data Processing with Pipeline Support ✨
 
-NovaLang provides **13 powerful Lambda operations** for functional data processing. These operations work with arrays and all collection types, enabling sophisticated data transformations and queries using a simple, intuitive API.
+NovaLang provides **15 powerful Lambda operations** with **🚀 Pipeline Processing** and **Method Chaining** for advanced functional data processing. These operations work with arrays and all collection types, enabling sophisticated data transformations with clean, readable syntax.
 
-*For comprehensive Lambda examples, see [lambda_demo.sf](examples/lambda_demo.sf) in the examples.*
+**🆕 NEW in v1.0.0-alpha:** Advanced pipeline operations `Lambda.pipeline()` and fluent API `Lambda.chain()` for method chaining!
+
+*For comprehensive examples, see [lambda_simple_demo.sf](examples/lambda_simple_demo.sf) and [lambda_demo.sf](examples/lambda_demo.sf) in the examples.*
+
+## 🚀 **NEW:** Pipeline Operations (Method Chaining)
+
+### **Lambda.pipeline()** - Functional Data Processing Pipeline
+
+Execute multiple operations in sequence for efficient, readable data processing:
+
+```javascript
+// Complex data processing pipeline
+let numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// Filter even → double → sort desc → take top 3
+let result = Lambda.pipeline(numbers, 
+    ["filter", "even"], 
+    ["map", "double"], 
+    ["sort", "desc"],
+    ["take", "3"]
+);
+console.log(result); // [20, 16, 12]
+
+// Data cleaning: distinct → positive → sorted
+let mixed = [1, 2, 2, 3, -1, 4, 4, 5, -2];
+let processed = Lambda.pipeline(mixed,
+    ["distinct"],           // Remove duplicates
+    ["filter", "positive"], // Only positive numbers  
+    ["sort", "asc"]        // Sort ascending
+);
+console.log(processed); // [1, 2, 3, 4, 5]
+```
+
+### **Lambda.chain()** - Fluent API with Step-by-Step Processing
+
+Create chainable objects for interactive data transformation:
+
+```javascript
+let data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+// Create chain and process step by step
+let chain = Lambda.chain(data);
+let step1 = chain["filter"](chain, "even");       // [2, 4, 6, 8, 10]
+let step2 = step1["map"](step1, "double");        // [4, 8, 12, 16, 20]
+let step3 = step2["take"](step2, 3);              // [4, 8, 12]
+
+// Terminal operations
+let result = step3["toArray"](step3);             // Get final array
+let sum = step3["sum"](step3);                    // Get sum: 24
+let count = step3["count"](step3);                // Get count: 3
+```
+
+**Performance Benefits:** Pipeline operations process data in a single pass, making them more efficient than separate operations.
 
 #### 🔍 **Filtering Operations**
 
@@ -1180,6 +1257,7 @@ novalang.exe repl
 # 🆕 Run the 9 essential examples (featuring NEW collections + Lambda!):
 novalang.exe examples/complete_guide.sf         # Comprehensive tutorial (recommended start)
 novalang.exe examples/collections_demo.sf       # 🆕 NEW! Enterprise Collections Demo
+novalang.exe examples/lambda_simple_demo.sf       # 🆕 NEW! Lambda Pipeline Operations Demo
 novalang.exe examples/lambda_demo.sf            # 🆕 NEW! Lambda Query Operations Demo
 novalang.exe examples/collections_basic_test.sf # 🆕 NEW! Collections Test Suite
 novalang.exe examples/readme_demo.sf            # Main feature demonstration
@@ -1204,6 +1282,7 @@ dotnet run repl
 # Run the essential examples during development:
 dotnet run run examples/complete_guide.sf         # Comprehensive tutorial
 dotnet run run examples/collections_demo.sf       # 🆕 NEW! Enterprise Collections Demo
+dotnet run run examples/lambda_simple_demo.sf       # 🆕 NEW! Lambda Pipeline Operations Demo
 dotnet run run examples/lambda_demo.sf            # 🆕 NEW! Lambda Query Operations Demo
 dotnet run run examples/collections_basic_test.sf # 🆕 NEW! Collections Test Suite
 dotnet run run examples/readme_demo.sf            # Main feature demo
@@ -1338,7 +1417,13 @@ The `examples/` folder contains 8 carefully curated, production-tested NovaLang 
 - Works with all collection types and regular arrays
 - Enterprise-grade data processing capabilities
 
-**Total: 25+ KB of curated, working examples** showcasing both core language features and enterprise collection capabilities with Lambda query operations
+### 🚀 **`lambda_simple_demo.sf`** (NEW!) - **Lambda Pipeline Operations Demo**  
+- **🆕 NEW FEATURE:** Lambda.pipeline() and Lambda.chain() method chaining
+- Functional data processing with pipeline operations for efficient transformations  
+- Step-by-step examples of fluent API and statistical operations
+- Demonstrates the new builder pattern approach for complex data processing
+
+**Total: 27+ KB of curated, working examples** showcasing both core language features and enterprise collection capabilities with advanced Lambda pipeline operations
 
 **See also:** 
 - [🔧 M3 Implementation Summary](#-m3-implementation-summary) for technical validation details

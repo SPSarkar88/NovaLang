@@ -934,12 +934,378 @@ public class Environment
         }));
 
         // ====================================
-        // Lambda-Style Query Operations for Collections (Basic Version)
+        // Lambda-Style Query Operations with Pipeline Support
         // ====================================
         
-        // Lambda.filter - Filter collections based on simple conditions
+        // Lambda.pipeline - Execute multiple operations in sequence (Functional Builder Pattern)
         global.Define("Lambda", new ObjectValue(new Dictionary<string, NovaValue>
         {
+            ["pipeline"] = new NativeFunctionValue("Lambda.pipeline", (args, env) =>
+            {
+                if (args.Length < 2)
+                    throw new RuntimeException("Lambda.pipeline expects (collection, operations...)");
+                
+                var collection = args[0];
+                var currentData = ExtractCollectionItems(collection);
+                
+                // Process each operation in sequence
+                for (int i = 1; i < args.Length; i++)
+                {
+                    if (args[i] is not ArrayValue operation || operation.Length < 1)
+                        throw new RuntimeException($"Operation {i} must be an array [operation] or [operation, param]");
+                    
+                    var opName = operation[0].ToString();
+                    var opParam = operation.Length > 1 ? operation[1].ToString() : "";
+                    
+                    // Apply operation using existing Lambda methods
+                    currentData = opName switch
+                    {
+                        "filter" => FilterItems(currentData, opParam),
+                        "map" => MapItems(currentData, opParam),
+                        "sort" => SortItems(currentData, opParam),
+                        "take" => TakeItems(currentData, opParam),
+                        "skip" => SkipItems(currentData, opParam),
+                        "distinct" => DistinctItems(currentData),
+                        "reverse" => ReverseItems(currentData),
+                        _ => throw new RuntimeException($"Unknown operation: {opName}")
+                    };
+                }
+                
+                return new ArrayValue(currentData);
+            }),
+            
+            // Lambda.chain - Fluent chaining helper
+            ["chain"] = new NativeFunctionValue("Lambda.chain", (args, env) =>
+            {
+                if (args.Length != 1)
+                    throw new RuntimeException("Lambda.chain expects (collection)");
+                
+                var collection = args[0];
+                var items = ExtractCollectionItems(collection);
+                
+                // Return a chain object with fluent methods
+                return new ObjectValue(new Dictionary<string, NovaValue>
+                {
+                    ["data"] = new ArrayValue(items),
+                    
+                    ["filter"] = new NativeFunctionValue("filter", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 2 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("filter expects (chain, filterType)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        var filterType = chainArgs[1].ToString();
+                        var filtered = FilterItems(data.Elements.ToArray(), filterType);
+                        
+                        // Return new chain object
+                        return new ObjectValue(new Dictionary<string, NovaValue>
+                        {
+                            ["data"] = new ArrayValue(filtered),
+                            ["filter"] = chain["filter"],
+                            ["map"] = chain["map"],
+                            ["sort"] = chain["sort"],
+                            ["take"] = chain["take"],
+                            ["skip"] = chain["skip"],
+                            ["distinct"] = chain["distinct"],
+                            ["reverse"] = chain["reverse"],
+                            ["toArray"] = chain["toArray"],
+                            ["sum"] = chain["sum"],
+                            ["count"] = chain["count"],
+                            ["average"] = chain["average"],
+                            ["min"] = chain["min"],
+                            ["max"] = chain["max"],
+                            ["first"] = chain["first"],
+                            ["last"] = chain["last"]
+                        });
+                    }),
+                    
+                    ["map"] = new NativeFunctionValue("map", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 2 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("map expects (chain, operation)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        var operation = chainArgs[1].ToString();
+                        var mapped = MapItems(data.Elements.ToArray(), operation);
+                        
+                        return new ObjectValue(new Dictionary<string, NovaValue>
+                        {
+                            ["data"] = new ArrayValue(mapped),
+                            ["filter"] = chain["filter"],
+                            ["map"] = chain["map"],
+                            ["sort"] = chain["sort"],
+                            ["take"] = chain["take"],
+                            ["skip"] = chain["skip"],
+                            ["distinct"] = chain["distinct"],
+                            ["reverse"] = chain["reverse"],
+                            ["toArray"] = chain["toArray"],
+                            ["sum"] = chain["sum"],
+                            ["count"] = chain["count"],
+                            ["average"] = chain["average"],
+                            ["min"] = chain["min"],
+                            ["max"] = chain["max"],
+                            ["first"] = chain["first"],
+                            ["last"] = chain["last"]
+                        });
+                    }),
+                    
+                    ["sort"] = new NativeFunctionValue("sort", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length < 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("sort expects (chain) or (chain, direction)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        var direction = chainArgs.Length > 1 ? chainArgs[1].ToString() : "asc";
+                        var sorted = SortItems(data.Elements.ToArray(), direction);
+                        
+                        return new ObjectValue(new Dictionary<string, NovaValue>
+                        {
+                            ["data"] = new ArrayValue(sorted),
+                            ["filter"] = chain["filter"],
+                            ["map"] = chain["map"],
+                            ["sort"] = chain["sort"],
+                            ["take"] = chain["take"],
+                            ["skip"] = chain["skip"],
+                            ["distinct"] = chain["distinct"],
+                            ["reverse"] = chain["reverse"],
+                            ["toArray"] = chain["toArray"],
+                            ["sum"] = chain["sum"],
+                            ["count"] = chain["count"],
+                            ["average"] = chain["average"],
+                            ["min"] = chain["min"],
+                            ["max"] = chain["max"],
+                            ["first"] = chain["first"],
+                            ["last"] = chain["last"]
+                        });
+                    }),
+                    
+                    ["take"] = new NativeFunctionValue("take", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 2 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("take expects (chain, count)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        var count = chainArgs[1].ToString();
+                        var taken = TakeItems(data.Elements.ToArray(), count);
+                        
+                        return new ObjectValue(new Dictionary<string, NovaValue>
+                        {
+                            ["data"] = new ArrayValue(taken),
+                            ["filter"] = chain["filter"],
+                            ["map"] = chain["map"],
+                            ["sort"] = chain["sort"],
+                            ["take"] = chain["take"],
+                            ["skip"] = chain["skip"],
+                            ["distinct"] = chain["distinct"],
+                            ["reverse"] = chain["reverse"],
+                            ["toArray"] = chain["toArray"],
+                            ["sum"] = chain["sum"],
+                            ["count"] = chain["count"],
+                            ["average"] = chain["average"],
+                            ["min"] = chain["min"],
+                            ["max"] = chain["max"],
+                            ["first"] = chain["first"],
+                            ["last"] = chain["last"]
+                        });
+                    }),
+                    
+                    ["skip"] = new NativeFunctionValue("skip", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 2 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("skip expects (chain, count)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        var count = chainArgs[1].ToString();
+                        var skipped = SkipItems(data.Elements.ToArray(), count);
+                        
+                        return new ObjectValue(new Dictionary<string, NovaValue>
+                        {
+                            ["data"] = new ArrayValue(skipped),
+                            ["filter"] = chain["filter"],
+                            ["map"] = chain["map"],
+                            ["sort"] = chain["sort"],
+                            ["take"] = chain["take"],
+                            ["skip"] = chain["skip"],
+                            ["distinct"] = chain["distinct"],
+                            ["reverse"] = chain["reverse"],
+                            ["toArray"] = chain["toArray"],
+                            ["sum"] = chain["sum"],
+                            ["count"] = chain["count"],
+                            ["average"] = chain["average"],
+                            ["min"] = chain["min"],
+                            ["max"] = chain["max"],
+                            ["first"] = chain["first"],
+                            ["last"] = chain["last"]
+                        });
+                    }),
+                    
+                    ["distinct"] = new NativeFunctionValue("distinct", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("distinct expects (chain)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        var distinct = DistinctItems(data.Elements.ToArray());
+                        
+                        return new ObjectValue(new Dictionary<string, NovaValue>
+                        {
+                            ["data"] = new ArrayValue(distinct),
+                            ["filter"] = chain["filter"],
+                            ["map"] = chain["map"],
+                            ["sort"] = chain["sort"],
+                            ["take"] = chain["take"],
+                            ["skip"] = chain["skip"],
+                            ["distinct"] = chain["distinct"],
+                            ["reverse"] = chain["reverse"],
+                            ["toArray"] = chain["toArray"],
+                            ["sum"] = chain["sum"],
+                            ["count"] = chain["count"],
+                            ["average"] = chain["average"],
+                            ["min"] = chain["min"],
+                            ["max"] = chain["max"],
+                            ["first"] = chain["first"],
+                            ["last"] = chain["last"]
+                        });
+                    }),
+                    
+                    ["reverse"] = new NativeFunctionValue("reverse", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("reverse expects (chain)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        var reversed = ReverseItems(data.Elements.ToArray());
+                        
+                        return new ObjectValue(new Dictionary<string, NovaValue>
+                        {
+                            ["data"] = new ArrayValue(reversed),
+                            ["filter"] = chain["filter"],
+                            ["map"] = chain["map"],
+                            ["sort"] = chain["sort"],
+                            ["take"] = chain["take"],
+                            ["skip"] = chain["skip"],
+                            ["distinct"] = chain["distinct"],
+                            ["reverse"] = chain["reverse"],
+                            ["toArray"] = chain["toArray"],
+                            ["sum"] = chain["sum"],
+                            ["count"] = chain["count"],
+                            ["average"] = chain["average"],
+                            ["min"] = chain["min"],
+                            ["max"] = chain["max"],
+                            ["first"] = chain["first"],
+                            ["last"] = chain["last"]
+                        });
+                    }),
+                    
+                    // Terminal operations
+                    ["toArray"] = new NativeFunctionValue("toArray", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("toArray expects (chain)");
+                        
+                        return chain["data"];
+                    }),
+                    
+                    ["sum"] = new NativeFunctionValue("sum", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("sum expects (chain)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        double sum = 0;
+                        foreach (var item in data.Elements)
+                        {
+                            if (item is NumberValue num)
+                                sum += num.Value;
+                        }
+                        return new NumberValue(sum);
+                    }),
+                    
+                    ["count"] = new NativeFunctionValue("count", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("count expects (chain)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        return new NumberValue(data.Length);
+                    }),
+                    
+                    ["average"] = new NativeFunctionValue("average", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("average expects (chain)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        if (data.Length == 0) return new NumberValue(0);
+                        
+                        double sum = 0;
+                        int count = 0;
+                        foreach (var item in data.Elements)
+                        {
+                            if (item is NumberValue num)
+                            {
+                                sum += num.Value;
+                                count++;
+                            }
+                        }
+                        return count == 0 ? new NumberValue(0) : new NumberValue(sum / count);
+                    }),
+                    
+                    ["min"] = new NativeFunctionValue("min", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("min expects (chain)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        if (data.Length == 0) return NullValue.Instance;
+                        
+                        NovaValue min = data[0];
+                        for (int i = 1; i < data.Length; i++)
+                        {
+                            if (CompareValues(data[i], min) < 0)
+                                min = data[i];
+                        }
+                        return min;
+                    }),
+                    
+                    ["max"] = new NativeFunctionValue("max", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("max expects (chain)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        if (data.Length == 0) return NullValue.Instance;
+                        
+                        NovaValue max = data[0];
+                        for (int i = 1; i < data.Length; i++)
+                        {
+                            if (CompareValues(data[i], max) > 0)
+                                max = data[i];
+                        }
+                        return max;
+                    }),
+                    
+                    ["first"] = new NativeFunctionValue("first", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("first expects (chain)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        return data.Length > 0 ? data[0] : NullValue.Instance;
+                    }),
+                    
+                    ["last"] = new NativeFunctionValue("last", (chainArgs, chainEnv) =>
+                    {
+                        if (chainArgs.Length != 1 || chainArgs[0] is not ObjectValue chain)
+                            throw new RuntimeException("last expects (chain)");
+                        
+                        var data = (ArrayValue)chain["data"];
+                        return data.Length > 0 ? data[data.Length - 1] : NullValue.Instance;
+                    })
+                });
+            }),
+            
+            // Keep the original static methods for backward compatibility
             ["filter"] = new NativeFunctionValue("Lambda.filter", (args, env) =>
             {
                 if (args.Length != 2)
@@ -947,29 +1313,9 @@ public class Environment
                 
                 var collection = args[0];
                 var filterType = args[1].ToString();
-                
                 var items = ExtractCollectionItems(collection);
-                var results = new List<NovaValue>();
-                
-                // Simple pre-defined filters
-                foreach (var item in items)
-                {
-                    bool include = filterType switch
-                    {
-                        "even" => item is NumberValue n && n.Value % 2 == 0,
-                        "odd" => item is NumberValue n && n.Value % 2 != 0,
-                        "positive" => item is NumberValue n && n.Value > 0,
-                        "negative" => item is NumberValue n && n.Value < 0,
-                        "nonEmpty" => item is StringValue s && !string.IsNullOrEmpty(s.Value),
-                        "truthy" => IsTruthy(item),
-                        _ => true // no filter
-                    };
-                    
-                    if (include)
-                        results.Add(item);
-                }
-                
-                return new ArrayValue(results.ToArray());
+                var results = FilterItems(items, filterType);
+                return new ArrayValue(results);
             }),
             
             ["map"] = new NativeFunctionValue("Lambda.map", (args, env) =>
@@ -1301,6 +1647,102 @@ public class Environment
         }
         
         throw new RuntimeException($"Value is not a function: {function}");
+    }
+    
+    // ====================================
+    // Lambda Pipeline Helper Methods
+    // ====================================
+    
+    private static NovaValue[] FilterItems(NovaValue[] items, string filterType)
+    {
+        var results = new List<NovaValue>();
+        
+        foreach (var item in items)
+        {
+            bool include = filterType switch
+            {
+                "even" => item is NumberValue n && n.Value % 2 == 0,
+                "odd" => item is NumberValue n && n.Value % 2 != 0,
+                "positive" => item is NumberValue n && n.Value > 0,
+                "negative" => item is NumberValue n && n.Value < 0,
+                "high" => item is NumberValue n && n.Value > 85, // for scores
+                "nonEmpty" => item is StringValue s && !string.IsNullOrEmpty(s.Value),
+                "truthy" => IsTruthy(item),
+                _ => true
+            };
+            
+            if (include) results.Add(item);
+        }
+        
+        return results.ToArray();
+    }
+    
+    private static NovaValue[] MapItems(NovaValue[] items, string operation)
+    {
+        var results = new List<NovaValue>();
+        
+        foreach (var item in items)
+        {
+            NovaValue result = operation switch
+            {
+                "double" => item is NumberValue n ? new NumberValue(n.Value * 2) : item,
+                "square" => item is NumberValue n ? new NumberValue(n.Value * n.Value) : item,
+                "abs" => item is NumberValue n ? new NumberValue(Math.Abs(n.Value)) : item,
+                "upper" => item is StringValue s ? new StringValue(s.Value.ToUpperInvariant()) : item,
+                "lower" => item is StringValue s ? new StringValue(s.Value.ToLowerInvariant()) : item,
+                "length" => item is StringValue s ? new NumberValue(s.Value.Length) : 
+                           item is ArrayValue a ? new NumberValue(a.Length) : item,
+                _ => item
+            };
+            results.Add(result);
+        }
+        
+        return results.ToArray();
+    }
+    
+    private static NovaValue[] SortItems(NovaValue[] items, string direction)
+    {
+        return direction == "desc" 
+            ? items.OrderByDescending(x => x, new NovaValueComparer()).ToArray()
+            : items.OrderBy(x => x, new NovaValueComparer()).ToArray();
+    }
+    
+    private static NovaValue[] TakeItems(NovaValue[] items, string countStr)
+    {
+        if (int.TryParse(countStr, out int count))
+        {
+            return items.Take(Math.Max(0, count)).ToArray();
+        }
+        return items;
+    }
+    
+    private static NovaValue[] SkipItems(NovaValue[] items, string countStr)
+    {
+        if (int.TryParse(countStr, out int count))
+        {
+            return items.Skip(Math.Max(0, count)).ToArray();
+        }
+        return items;
+    }
+    
+    private static NovaValue[] DistinctItems(NovaValue[] items)
+    {
+        var seen = new HashSet<string>();
+        var results = new List<NovaValue>();
+        
+        foreach (var item in items)
+        {
+            var key = item.ToString();
+            if (seen.Add(key))
+                results.Add(item);
+        }
+        
+        return results.ToArray();
+    }
+    
+    private static NovaValue[] ReverseItems(NovaValue[] items)
+    {
+        return items.Reverse().ToArray();
     }
     
     /// <summary>
